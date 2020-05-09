@@ -1,4 +1,5 @@
 import ply.yacc as yacc
+from lexer import tokens
 
 # Precedence rules for the arithmetic operators
 precedence = (
