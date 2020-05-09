@@ -3,7 +3,13 @@ import ply.lex as lex
 # Reserved keywords
 reserved = {
     'declare' : 'DECLARE',
+    'display' : 'DISPLAY',
     'int' : 'INT',
+    'double' : 'DOUBLE',
+    'char' : 'CHAR',
+    'string' : 'STRING',
+    'bool' : 'BOOL',
+    'to' : 'TO',
 }
 
 # List of tokens types
@@ -15,14 +21,16 @@ tokens = [
 
 
 # Tokens
-t_PLUS    = r'\+'
-t_MINUS   = r'-'
-t_TIMES   = r'\*'
-t_DIVIDE  = r'/'
-t_EQUALS  = r'='
-t_LPAREN  = r'\('
-t_RPAREN  = r'\)'
-t_NAME    = r'[a-zA-Z_][a-zA-Z0-9_]*'
+t_PLUS   = r'\+'
+t_MINUS  = r'-'
+t_TIMES  = r'\*'
+t_DIVIDE = r'/'
+t_EQUALS = r'='
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_NAME   = r'[a-zA-Z_][a-zA-Z0-9_]*'
+t_STRING = r'\"(.+?)\"'
+t_CHAR   = r'\'(.+?)\''
 
 def t_NUMBER(t):
     r'\d+'
@@ -53,7 +61,9 @@ data = '''
   + -20 *2
 '''
 data2 = '''
+"5"
 declare int myInt
+declare int x to "5a"'a'
 '''
 
 # Give the lexer some input
