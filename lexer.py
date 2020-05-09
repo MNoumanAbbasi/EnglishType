@@ -30,14 +30,19 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_NAME   = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
+def t_DOUBLE(t):
+    r'[+-]?([0-9]*[.])?[0-9]+'
+    t.value = float(t.value)
+    return t
+
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)
     return t
 
-def t_DOUBLE(t):
-    r'[+-]?([0-9]*[.])?[0-9]+'
-    t.value = float(t.value)
+def t_CHAR(t):
+    r'\'(.+?)\''
+    t.value = str(t.value[1:-1])
     return t
 
 def t_STRING(t):
@@ -45,9 +50,9 @@ def t_STRING(t):
     t.value = str(t.value[1:-1])
     return t
 
-def t_CHAR(t):
-    r'\'(.+?)\''
-    t.value = str(t.value[1:-1])
+def t_BOOL(t):
+    r'/^true$/|/^false$/'
+    t.value = True if t.value == 'true' else False
     return t
 
 # Ignored characters
@@ -75,7 +80,7 @@ data = '''
 '''
 data2 = '''
 "5"
-declare int myInt
+declare int myInt 5
 declare int x to 5.2
 '''
 
