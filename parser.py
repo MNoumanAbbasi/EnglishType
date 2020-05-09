@@ -11,6 +11,14 @@ precedence = (
 # dictionary of names (for storing variables)
 names = { }
 
+def p_statement_declare(p):
+    '''statement : DECLARE type NAME'''
+    names[p[3]] = ('', p[2])
+
+def p_type_datatype(p):
+    'type : INT'
+    p[0] = p[1]
+
 def p_statement_assign(p):
     'statement : NAME EQUALS expression'
     names[p[1]] = p[3]
