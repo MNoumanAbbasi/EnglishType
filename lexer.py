@@ -29,12 +29,20 @@ t_EQUALS = r'='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_NAME   = r'[a-zA-Z_][a-zA-Z0-9_]*'
-t_STRING = r'\"(.+?)\"'
-t_CHAR   = r'\'(.+?)\''
 
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)
+    return t
+
+def t_STRING(t):
+    r'\"(.+?)\"'
+    t.value = str(t.value[1:-1])
+    return t
+
+def t_CHAR(t):
+    r'\'(.+?)\''
+    t.value = str(t.value[1:-1])
     return t
 
 # Ignored characters
@@ -63,7 +71,7 @@ data = '''
 data2 = '''
 "5"
 declare int myInt
-declare int x to "5a"'a'
+declare int x to 5.2
 '''
 
 # Give the lexer some input

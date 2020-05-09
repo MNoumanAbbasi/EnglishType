@@ -32,7 +32,9 @@ def p_statement_declare(p):
 
 def p_value_expression(p):
     '''value : expression
-             | NAME'''
+             | NUMBER
+             | DOUBLE
+             | STRING
     p[0] = p[1]
 
 def p_statement_display(p):
