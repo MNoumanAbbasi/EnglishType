@@ -32,13 +32,15 @@ def p_statement_declare(p):
 
 def p_value_expression(p):
     '''value : expression
-             | NUMBER
-             | DOUBLE
              | STRING
+             | CHAR
+             | BOOL'''
     p[0] = p[1]
 
+
 def p_statement_display(p):
-    '''statement : 
+    'statement : DISPLAY value'
+    print(p[2])
 
 def p_statement_value(p):
     'statement : value'
@@ -79,16 +81,17 @@ def p_expression_group(p):
     p[0] = p[2]
 
 def p_expression_number(p):
-    'expression : NUMBER'
+    '''expression : INT
+                  | DOUBLE'''
     p[0] = p[1]
 
-# def p_expression_name(p):
-#     'expression : NAME'
-#     try:
-#         p[0] = names[p[1]]
-#     except LookupError:
-#         print(f"Undefined name {p[1]!r}")
-#         p[0] = 0
+def p_value_name(p):
+    'value : NAME'
+    try:
+        p[0] = names[p[1]][0]
+    except LookupError:
+        print(f"Undefined name {p[1]!r}")
+        p[0] = 0
 
 def p_error(p):
     print(f"Syntax error")

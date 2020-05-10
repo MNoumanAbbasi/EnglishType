@@ -85,7 +85,7 @@ declare int x to 5.2
 '''
 
 # Give the lexer some input
-lexer.input(data2)
+# lexer.input(data2)
 
-for tok in lexer:
-    print(tok)
+# for tok in lexer:
+#     print(tok)
