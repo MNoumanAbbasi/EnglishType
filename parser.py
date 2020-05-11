@@ -1,6 +1,8 @@
 import ply.yacc as yacc
 from lexer import tokens
 
+# TODO: Declare and assign don't perform type checking
+
 # Precedence rules for the arithmetic operators
 precedence = (
     ('left','PLUS','MINUS'),
@@ -24,6 +26,8 @@ def p_statement_declare(p):
     value = None
     if len(p) == 6:
         value = p[5]
+        # if type(value) != p[2]:
+        #     pass
         # value = int(p[5])   if p[2] == 'int' else value
         # value = float(p[5]) if p[2] == 'double' else value
         # value = chr(p[5])   if p[2] == 'char' else value
@@ -31,6 +35,7 @@ def p_statement_declare(p):
         # value = bool(p[5])  if p[2] == 'bool' else value
     variables[p[3]] = (value, p[2])
     # print('TypeError')
+    # print(type(value))
     print(variables)
 
 def p_value_literal(p):
@@ -66,9 +71,14 @@ def p_statement_display(p):
 #     'statement : value'
 #     print(p[1])
 
-# def p_statement_assign(p):
-#     'statement : ID EQUALS expression'
-#     variables[p[1]] = p[3]
+def p_statement_assign(p):
+    'statement : ASSIGN ID TO value'
+    try:
+        varType = variables[p[2]][1]
+        variables[p[2]] = (p[4], varType)   # making new tuple since tuples immutable
+    except LookupError:
+        print(f"Undeclared variable name/id {p[2]!r}")
+    print(variables)
 
 def p_type_datatype(p):
     '''type : INT_TYPE

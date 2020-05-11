@@ -3,6 +3,7 @@ import ply.lex as lex
 # Reserved keywords
 keywords = {
     'declare' : 'DECLARE',
+    'assign' : 'ASSIGN',
     'display' : 'DISPLAY',
     'int' : 'INT_TYPE',
     'double' : 'DOUBLE_TYPE',
@@ -81,8 +82,8 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-true false
-myint int
+declare myint int
+assign myint to 5
 '''
 
 # Give the lexer some input
