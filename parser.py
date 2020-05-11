@@ -16,7 +16,7 @@ variables = { }
 
 def p_statement_declare(p):
     '''statement : DECLARE type ID
-                 | DECLARE type ID TO '''
+                 | DECLARE type ID TO value'''
     if p[3] in variables:
         print('RedeclarationError')
         return
@@ -33,11 +33,28 @@ def p_statement_declare(p):
     # print('TypeError')
     print(variables)
 
-def p_value_expression(p):
-    '''value : expression
-             | STRING
-             | CHAR
-             | BOOL'''
+def p_value_literal(p):
+    'value : literal'
+    p[0] = p[1]
+
+def p_value_id(p):
+    'value : ID'
+    try:
+        p[0] = variables[p[1]][0]
+    except LookupError:
+        print(f"Undefined variable name/id {p[1]!r}")
+        p[0] = 0
+
+def p_literal(p):
+    '''literal : number
+               | CHAR
+               | STRING
+               | BOOL'''
+    p[0] = p[1]
+
+def p_number(p):
+    '''number : INT
+              | DOUBLE'''
     p[0] = p[1]
 
 
@@ -45,13 +62,13 @@ def p_statement_display(p):
     'statement : DISPLAY value'
     print(p[2])
 
-def p_statement_value(p):
-    'statement : value'
-    print(p[1])
+# def p_statement_value(p):
+#     'statement : value'
+#     print(p[1])
 
-def p_statement_assign(p):
-    'statement : ID EQUALS expression'
-    variables[p[1]] = p[3]
+# def p_statement_assign(p):
+#     'statement : ID EQUALS expression'
+#     variables[p[1]] = p[3]
 
 def p_type_datatype(p):
     '''type : INT_TYPE
@@ -84,17 +101,9 @@ def p_expression_group(p):
     p[0] = p[2]
 
 def p_expression_number(p):
-    '''expression : INT
-                  | DOUBLE'''
+    'expression : number'
     p[0] = p[1]
 
-def p_value_id(p):
-    'value : ID'
-    try:
-        p[0] = variables[p[1]][0]
-    except LookupError:
-        print(f"Undefined variable name/id {p[1]!r}")
-        p[0] = 0
 
 def p_error(p):
     print(f"Syntax error")
