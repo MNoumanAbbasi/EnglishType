@@ -42,6 +42,10 @@ def p_value_literal(p):
     'value : literal'
     p[0] = p[1]
 
+def p_value_expression(p):
+    'value : expression'
+    p[0] = p[1]
+
 def p_value_id(p):
     'value : ID'
     try:
@@ -51,8 +55,7 @@ def p_value_id(p):
         p[0] = 0
 
 def p_literal(p):
-    '''literal : number
-               | CHAR
+    '''literal : CHAR
                | STRING
                | BOOL'''
     p[0] = p[1]
@@ -123,7 +126,7 @@ yacc.yacc()
 
 while True:
     try:
-        s = input('calc > ')
+        s = input('>> ')
     except EOFError:
         break
     yacc.parse(s)
