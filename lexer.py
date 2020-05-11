@@ -29,7 +29,13 @@ t_DIVIDE = r'/'
 t_EQUALS = r'='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
-t_ID   = r'[a-zA-Z_][a-zA-Z0-9_]*'
+
+def t_BOOL(t):
+    r'true|false'
+    t.value = True if t.value == 'true' else False
+    return t
+
+# t_ID   = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
 def t_INT(t):
     r'[+-]?[0-9]+'
@@ -49,11 +55,6 @@ def t_CHAR(t):
 def t_STRING(t):
     r'\"(.+?)\"'
     t.value = str(t.value[1:-1])
-    return t
-
-def t_BOOL(t):
-    r'/^true$/|/^false$/'
-    t.value = True if t.value == 'true' else False
     return t
 
 # Ignored characters
@@ -80,9 +81,8 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-"5"
-declare int myInt 5
-declare int x to 5.2
+true false
+myint int
 '''
 
 # Give the lexer some input
@@ -90,3 +90,6 @@ lexer.input(data2)
 
 for tok in lexer:
     print(tok)
+
+# if r'^true$/' == 
+#     print("OK")
