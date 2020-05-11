@@ -1,23 +1,24 @@
 import ply.lex as lex
 
 # Reserved keywords
-reserved = {
+keywords = {
     'declare' : 'DECLARE',
     'display' : 'DISPLAY',
-    'int' : 'INT',
-    'double' : 'DOUBLE',
-    'char' : 'CHAR',
-    'string' : 'STRING',
-    'bool' : 'BOOL',
+    'int' : 'INT_TYPE',
+    'double' : 'DOUBLE_TYPE',
+    'char' : 'CHAR_TYPE',
+    'string' : 'STRING_TYPE',
+    'bool' : 'BOOL_TYPE',
     'to' : 'TO',
 }
 
 # List of tokens types
 tokens = [
-    'NAME','NUMBER',
+    'ID','LITERAL',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
-    'LPAREN','RPAREN', 'RESERVE',
- ] + list(reserved.values())
+    'LPAREN','RPAREN',
+    'INT', 'DOUBLE', 'CHAR', 'STRING', 'BOOL',
+ ] + list(keywords.values())
 
 
 # Tokens
@@ -28,7 +29,7 @@ t_DIVIDE = r'/'
 t_EQUALS = r'='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
-t_NAME   = r'[a-zA-Z_][a-zA-Z0-9_]*'
+t_ID   = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
 def t_INT(t):
     r'[+-]?[0-9]+'
@@ -65,7 +66,7 @@ def t_newline(t):
 # token specfication for reserved keywords
 def t_RESERVE(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
-    t.type = reserved.get(t.value, 'NAME')
+    t.type = keywords.get(t.value, 'ID')
     return t
 
 def t_error(t):
@@ -85,7 +86,7 @@ declare int x to 5.2
 '''
 
 # Give the lexer some input
-# lexer.input(data2)
+lexer.input(data2)
 
-# for tok in lexer:
-#     print(tok)
+for tok in lexer:
+    print(tok)
