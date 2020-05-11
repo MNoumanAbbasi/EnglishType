@@ -21,17 +21,15 @@ def p_statement_declare(p):
         return
 
     value = None
-    try:
-        if len(p) == 6:
-            value = p[5]
-            # value = int(p[5])   if p[2] == 'int' else value
-            # value = float(p[5]) if p[2] == 'double' else value
-            # value = chr(p[5])   if p[2] == 'char' else value
-            # value = str(p[5])   if p[2] == 'string' else value
-            # value = bool(p[5])  if p[2] == 'bool' else value
-        variables[p[3]] = (value, p[2])
-    except:
-        print('TypeError')
+    if len(p) == 6:
+        value = p[5]
+        # value = int(p[5])   if p[2] == 'int' else value
+        # value = float(p[5]) if p[2] == 'double' else value
+        # value = chr(p[5])   if p[2] == 'char' else value
+        # value = str(p[5])   if p[2] == 'string' else value
+        # value = bool(p[5])  if p[2] == 'bool' else value
+    variables[p[3]] = (value, p[2])
+    print('TypeError')
     print(variables)
 
 def p_value_expression(p):
