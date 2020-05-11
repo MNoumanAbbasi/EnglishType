@@ -83,7 +83,7 @@ data = '''
 '''
 data2 = '''
 declare myint int
-assign myint to 5+ 5
+assign myint to 5+ 5.0
 '''
 
 # Give the lexer some input

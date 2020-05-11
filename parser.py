@@ -24,18 +24,23 @@ def p_statement_declare(p):
         return
 
     value = None
+    typeError = False
     if len(p) == 6:
         value = p[5]
-        # if type(value) != p[2]:
-        #     pass
-        # value = int(p[5])   if p[2] == 'int' else value
-        # value = float(p[5]) if p[2] == 'double' else value
-        # value = chr(p[5])   if p[2] == 'char' else value
-        # value = str(p[5])   if p[2] == 'string' else value
-        # value = bool(p[5])  if p[2] == 'bool' else value
-    variables[p[3]] = (value, p[2])
-    # print('TypeError')
-    # print(type(value))
+        if p[2] == 'int' and not isinstance(value, int):
+            typeError = True
+        if p[2] == 'double' and not isinstance(value, float):
+            typeError = True
+        if p[2] == 'char' and not isinstance(value, str):
+            typeError = True
+        if p[2] == 'string' and not isinstance(value, str):
+            typeError = True
+        if p[2] == 'bool' and not isinstance(value, bool):
+            typeError = True
+    if typeError:
+        print('TypeError')
+    else:
+        variables[p[3]] = (value, p[2])
     print(variables)
 
 def p_value_literal(p):
