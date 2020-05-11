@@ -17,18 +17,17 @@ precedence = (
 variables = { }
 
 def _checkTypeError(value, valType):
-    'Returns true if value does not match type'
+    'Raises typeError if value does not match type'
     if valType == 'int' and not isinstance(value, int):
-        return True
+        raise TypeError
     if valType == 'double' and not isinstance(value, float):
-        return True
+        raise TypeError
     if valType == 'char' and not isinstance(value, str):
-        return True
+        raise TypeError
     if valType == 'string' and not isinstance(value, str):
-        return True
+        raise TypeError
     if valType == 'bool' and not isinstance(value, bool):
-        return True
-    return False
+        raise TypeError
 
 def p_statement_declare(p):
     '''statement : DECLARE type ID
@@ -38,13 +37,13 @@ def p_statement_declare(p):
         return
 
     value = None
-    if len(p) == 6:
-        value = p[5]
-        if _checkTypeError(value, p[2]):
-            print('TypeError')
-            return
-
-    variables[p[3]] = (value, p[2])
+    try:
+        if len(p) == 6:
+            value = p[5]
+            _checkTypeError(value, p[2])
+        variables[p[3]] = (value, p[2])
+    except TypeError:
+        print("TypeError")
     print(variables)
 
 def p_value_literal(p):
@@ -87,9 +86,12 @@ def p_statement_assign(p):
     'statement : ASSIGN ID TO value'
     try:
         varType = variables[p[2]][1]
+        _checkTypeError(p[4], varType)
         variables[p[2]] = (p[4], varType)   # making new tuple since tuples immutable
     except LookupError:
         print(f"Undeclared variable name/id {p[2]!r}")
+    except TypeError:
+        print("TypeError")
     print(variables)
 
 def p_type_datatype(p):
