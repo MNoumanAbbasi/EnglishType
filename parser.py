@@ -11,11 +11,12 @@ precedence = (
 # Dictionary of variable
 # key: identifier/name
 # value: tuple of literal value and type
+# e.g. 'myInt' : (5, 'int')
 variables = { }
 
 def p_statement_declare(p):
     '''statement : DECLARE type ID
-                 | DECLARE type ID TO value'''
+                 | DECLARE type ID TO '''
     if p[3] in variables:
         print('RedeclarationError')
         return
@@ -29,7 +30,7 @@ def p_statement_declare(p):
         # value = str(p[5])   if p[2] == 'string' else value
         # value = bool(p[5])  if p[2] == 'bool' else value
     variables[p[3]] = (value, p[2])
-    print('TypeError')
+    # print('TypeError')
     print(variables)
 
 def p_value_expression(p):
