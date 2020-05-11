@@ -16,6 +16,20 @@ precedence = (
 # e.g. 'myInt' : (5, 'int')
 variables = { }
 
+def _checkTypeError(value, valType):
+    'Returns true if value does not match type'
+    if valType == 'int' and not isinstance(value, int):
+        return True
+    if valType == 'double' and not isinstance(value, float):
+        return True
+    if valType == 'char' and not isinstance(value, str):
+        return True
+    if valType == 'string' and not isinstance(value, str):
+        return True
+    if valType == 'bool' and not isinstance(value, bool):
+        return True
+    return False
+
 def p_statement_declare(p):
     '''statement : DECLARE type ID
                  | DECLARE type ID TO value'''
@@ -24,23 +38,13 @@ def p_statement_declare(p):
         return
 
     value = None
-    typeError = False
     if len(p) == 6:
         value = p[5]
-        if p[2] == 'int' and not isinstance(value, int):
-            typeError = True
-        if p[2] == 'double' and not isinstance(value, float):
-            typeError = True
-        if p[2] == 'char' and not isinstance(value, str):
-            typeError = True
-        if p[2] == 'string' and not isinstance(value, str):
-            typeError = True
-        if p[2] == 'bool' and not isinstance(value, bool):
-            typeError = True
-    if typeError:
-        print('TypeError')
-    else:
-        variables[p[3]] = (value, p[2])
+        if _checkTypeError(value, p[2]):
+            print('TypeError')
+            return
+
+    variables[p[3]] = (value, p[2])
     print(variables)
 
 def p_value_literal(p):
