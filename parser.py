@@ -8,7 +8,7 @@ precedence = (
     ('right','UMINUS'),
     )
 
-# dictionary of names (for storing variables)
+# Dictionary of names (for storing variables)
 names = { }
 
 def p_statement_declare(p):
