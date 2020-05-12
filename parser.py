@@ -74,9 +74,17 @@ def p_number(p):
 
 
 def p_statement_display(p):
-    'statement : DISPLAY value'
+    'statement : DISPLAY dispvalue'
     print(p[2])
 
+def p_display_value(p):
+    '''dispvalue : value dispvalue
+                 | value'''
+    p[0] = str(p[1]) + " " + (str(p[2]) if len(p) == 3 else "")
+
+def p_empty(p):
+    'empty :'
+    pass
 # def p_statement_value(p):
 #     'statement : value'
 #     print(p[1])
