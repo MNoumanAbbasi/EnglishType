@@ -11,19 +11,6 @@ precedence = (
     ('right','UMINUS'),
     )
 
-def _checkTypeError(value, valType):
-    'Raises typeError if value does not match type'
-    if valType == 'int' and not isinstance(value, int):
-        raise TypeError
-    if valType == 'double' and not isinstance(value, float):
-        raise TypeError
-    if valType == 'char' and not isinstance(value, str):
-        raise TypeError
-    if valType == 'string' and not isinstance(value, str):
-        raise TypeError
-    if valType == 'bool' and not isinstance(value, bool):
-        raise TypeError
-
 def p_statement(p):
     '''statement : var_declare
                  | var_assign
@@ -34,17 +21,17 @@ def p_var_declare(p):
     '''var_declare : DECLARE type ID
                    | DECLARE type ID TO value'''
     if len(p) == 6:
-        try:
-            _checkTypeError(p[5], p[2])
-            p[0] = (p[1], p[2], p[3], p[5])
-        except TypeError:
-            print("TypeError")
+        # try:
+            # _checkTypeError(p[5], p[2])
+        p[0] = ('declare', p[2], p[3], p[5])
+        # except TypeError:
+            # print("TypeError")
     else:
         p[0] = (p[1], p[2], p[3], None)
 
 def p_var_assign(p):
-    'var_assign : ASSIGN ID TO value'
-    p[0] = (p[1], p[2], p[4])
+    'var_assign : SET ID TO value'
+    p[0] = ('assign', p[2], p[4])
 
 def p_value_literal(p):
     'value : literal'
@@ -54,13 +41,9 @@ def p_value_expression(p):
     'value : expression'
     p[0] = p[1]
 
-# def p_value_id(p):
-#     'value : ID'
-#     try:
-#         p[0] = variables[p[1]][0]
-#     except LookupError:
-#         print(f"Undefined variable name/id {p[1]!r}")
-#         p[0] = 0
+def p_value_id(p):
+    'value : ID'
+    p[0] = ('id', p[1])
 
 def p_literal(p):
     '''literal : CHAR

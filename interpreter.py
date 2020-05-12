@@ -1,5 +1,4 @@
 import ply.yacc as yacc
-from parser import _checkTypeError
 import parser
 yaplParser = yacc.yacc(module=parser)
 
@@ -10,16 +9,41 @@ yaplParser = yacc.yacc(module=parser)
 # e.g. 'myInt' : (5, 'int')
 variables = { }
 
+def _checkTypeError(value, valType):
+    'Raises typeError if value does not match type'
+    if valType == 'int' and not isinstance(value, int):
+        raise TypeError
+    if valType == 'double' and not isinstance(value, float):
+        raise TypeError
+    if valType == 'char' and not isinstance(value, str):
+        raise TypeError
+    if valType == 'string' and not isinstance(value, str):
+        raise TypeError
+    if valType == 'bool' and not isinstance(value, bool):
+        raise TypeError
+
+
+def get_value_id(id):
+    try:
+        return variables[id][0]
+    except LookupError:
+        print(f"Undefined variable name/id {p[1]!r}")
+        return 0
+
+
 def declare_variable(id, value, typ):
     if id in variables:
         print('RedeclarationError')
-        return            
-    variables[id] = (value, typ)
+        return
+    try:
+        _checkTypeError(value, typ)
+        variables[id] = (value, typ)
+    except TypeError:
+        print("TypeError")
 
 def assign_variable(id, value):
     try:
         varType = variables[id][1]
-        print(value, varType)
         _checkTypeError(value, varType)
         variables[id] = (value, varType)   # making new tuple since tuples immutable
     except LookupError:
@@ -28,13 +52,19 @@ def assign_variable(id, value):
         print("TypeError")
 
 
-def run(tree):
-    if type(tree) == tuple:
-        if tree[0] == 'declare':
-            declare_variable(tree[2], tree[3], tree[1])
-        if tree[0] == 'assign':
-            assign_variable(tree[1], tree[2])
+def interpret(pt):
+    'Runs the instructions in the passed Parse Tree'
+    print(pt)
+    if type(pt) == tuple:
+        if pt[0] == 'id':
+            return get_value_id(pt[1])
+        elif pt[0] == 'declare':
+            declare_variable(pt[2], interpret(pt[3]), pt[1])
+        elif pt[0] == 'assign':
+            assign_variable(pt[1], interpret(pt[2]))
         print(variables)
+    else:
+        return pt
 
 
 while True:
@@ -44,4 +74,4 @@ while True:
         break
     tree = yaplParser.parse(s)
     # print(tree)
-    run(tree)
+    interpret(tree)

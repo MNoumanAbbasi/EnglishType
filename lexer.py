@@ -3,7 +3,7 @@ import ply.lex as lex
 # Reserved keywords
 keywords = {
     'declare' : 'DECLARE',
-    'assign' : 'ASSIGN',
+    'set' : 'SET',
     'print' : 'PRINT',
     'int' : 'INT_TYPE',
     'double' : 'DOUBLE_TYPE',
