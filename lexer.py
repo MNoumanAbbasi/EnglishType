@@ -4,7 +4,7 @@ import ply.lex as lex
 keywords = {
     'declare' : 'DECLARE',
     'assign' : 'ASSIGN',
-    'display' : 'DISPLAY',
+    'print' : 'PRINT',
     'int' : 'INT_TYPE',
     'double' : 'DOUBLE_TYPE',
     'char' : 'CHAR_TYPE',
