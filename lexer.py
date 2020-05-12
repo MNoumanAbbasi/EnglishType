@@ -16,13 +16,16 @@ keywords = {
 # List of tokens types
 tokens = [
     'ID','LITERAL',
-    'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
-    'LPAREN','RPAREN',
     'INT', 'DOUBLE', 'CHAR', 'STRING', 'BOOL',
+    'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
+    'INCREM', 'DECREM',
+    'LPAREN','RPAREN',
  ] + list(keywords.values())
 
 
 # Tokens
+t_INCREM = r'\+\+'
+t_DECREM = r'--'
 t_PLUS   = r'\+'
 t_MINUS  = r'-'
 t_TIMES  = r'\*'
@@ -83,8 +86,8 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-declare myint int
-assign myint to 5+ 5.0
+declare myint - int --
+assign myint to 5+ 5++
 '''
 
 # Give the lexer some input
