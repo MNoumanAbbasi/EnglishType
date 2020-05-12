@@ -1,7 +1,6 @@
 import ply.yacc as yacc
 from lexer import tokens
 
-# TODO: Declare and assign don't perform type checking
 
 # Precedence rules for the arithmetic operators
 precedence = (
