@@ -26,9 +26,9 @@ def _checkTypeError(value, valType):
 
 def p_statement(p):
     '''statement : var_declare
+                 | var_assign
                  | empty'''
     p[0] = p[1]
-    print(p[0])
 
 def p_var_declare(p):
     '''var_declare : DECLARE type ID
@@ -41,6 +41,10 @@ def p_var_declare(p):
             print("TypeError")
     else:
         p[0] = (p[1], p[2], p[3], None)
+
+def p_var_assign(p):
+    'var_assign : ASSIGN ID TO value'
+    p[0] = (p[1], p[2], p[4])
 
 def p_value_literal(p):
     'value : literal'
@@ -86,17 +90,6 @@ def p_empty(p):
 #     'statement : value'
 #     print(p[1])
 
-# def p_statement_assign(p):
-#     'statement : ASSIGN ID TO value'
-#     try:
-#         varType = variables[p[2]][1]
-#         _checkTypeError(p[4], varType)
-#         variables[p[2]] = (p[4], varType)   # making new tuple since tuples immutable
-#     except LookupError:
-#         print(f"Undeclared variable name/id {p[2]!r}")
-#     except TypeError:
-#         print("TypeError")
-#     print(variables)
 
 def p_type_datatype(p):
     '''type : INT_TYPE
@@ -135,11 +128,3 @@ def p_expression_number(p):
 def p_error(p):
     # print(f"Syntax error")
     print(f"Syntax error at {p.value!r}")
-
-# yacc.yacc()
-# while True:
-#     try:
-#         s = input('>> ')
-#     except EOFError:
-#         break
-#     yacc.parse(s)
