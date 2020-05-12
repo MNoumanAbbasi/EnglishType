@@ -1,7 +1,15 @@
 import ply.yacc as yacc
-import lexer
-# tokens = lexer.tokens
 from lexer import tokens
+
+# All lines are statements
+start = 'statement'
+
+# Precedence rules for the arithmetic operators
+precedence = (
+    ('left','PLUS','MINUS'),
+    ('left','TIMES','DIVIDE'),
+    ('right','UMINUS'),
+    )
 
 def _checkTypeError(value, valType):
     'Raises typeError if value does not match type'
@@ -16,9 +24,15 @@ def _checkTypeError(value, valType):
     if valType == 'bool' and not isinstance(value, bool):
         raise TypeError
 
+def p_statement(p):
+    '''statement : var_declare
+                 | empty'''
+    p[0] = p[1]
+    print(p[0])
+
 def p_var_declare(p):
-    '''var_declare : DECLARE INT ID'''
-                #    | DECLARE INT ID TO value'''
+    '''var_declare : DECLARE type ID
+                   | DECLARE type ID TO value'''
     if len(p) == 6:
         try:
             _checkTypeError(p[5], p[2])
@@ -36,13 +50,13 @@ def p_value_expression(p):
     'value : expression'
     p[0] = p[1]
 
-def p_value_id(p):
-    'value : ID'
-    try:
-        p[0] = variables[p[1]][0]
-    except LookupError:
-        print(f"Undefined variable name/id {p[1]!r}")
-        p[0] = 0
+# def p_value_id(p):
+#     'value : ID'
+#     try:
+#         p[0] = variables[p[1]][0]
+#     except LookupError:
+#         print(f"Undefined variable name/id {p[1]!r}")
+#         p[0] = 0
 
 def p_literal(p):
     '''literal : CHAR
@@ -68,21 +82,21 @@ def p_printvalue(p):
 def p_empty(p):
     'empty :'
     p[0] = None
-def p_statement_value(p):
-    'statement : value'
-    print(p[1])
+# def p_statement_value(p):
+#     'statement : value'
+#     print(p[1])
 
-def p_statement_assign(p):
-    'statement : ASSIGN ID TO value'
-    try:
-        varType = variables[p[2]][1]
-        _checkTypeError(p[4], varType)
-        variables[p[2]] = (p[4], varType)   # making new tuple since tuples immutable
-    except LookupError:
-        print(f"Undeclared variable name/id {p[2]!r}")
-    except TypeError:
-        print("TypeError")
-    print(variables)
+# def p_statement_assign(p):
+#     'statement : ASSIGN ID TO value'
+#     try:
+#         varType = variables[p[2]][1]
+#         _checkTypeError(p[4], varType)
+#         variables[p[2]] = (p[4], varType)   # making new tuple since tuples immutable
+#     except LookupError:
+#         print(f"Undeclared variable name/id {p[2]!r}")
+#     except TypeError:
+#         print("TypeError")
+#     print(variables)
 
 def p_type_datatype(p):
     '''type : INT_TYPE
@@ -119,13 +133,13 @@ def p_expression_number(p):
     p[0] = p[1]
 
 def p_error(p):
-    print(f"Syntax error")
-    # print(f"Syntax error at {p.value!r}")
+    # print(f"Syntax error")
+    print(f"Syntax error at {p.value!r}")
 
-yacc.yacc()
-while True:
-    try:
-        s = input('>> ')
-    except EOFError:
-        break
-    yacc.parse(s)
+# yacc.yacc()
+# while True:
+#     try:
+#         s = input('>> ')
+#     except EOFError:
+#         break
+#     yacc.parse(s)

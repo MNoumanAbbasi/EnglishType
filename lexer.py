@@ -95,6 +95,3 @@ assign myint to 5+ 5++
 
 # for tok in lexer:
 #     print(tok)
-
-# if r'^true$/' == 
-#     print("OK")

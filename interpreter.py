@@ -1,12 +1,7 @@
 import ply.yacc as yacc
 import parser
-yaplParser = yacc.yacc()
-# Precedence rules for the arithmetic operators
-precedence = (
-    ('left','PLUS','MINUS'),
-    ('left','TIMES','DIVIDE'),
-    ('right','UMINUS'),
-    )
+yaplParser = yacc.yacc(module=parser)
+
 
 # Dictionary of variable
 # key: identifier/name
@@ -15,11 +10,6 @@ precedence = (
 variables = { }
 
 
-def p_statement(p):
-    '''statement : var_declare'''
-                #  | empty'''
-    run(p)
-    print(variables)
 
 def declare_variable(id, typ, value):
     if id in variables:
@@ -27,14 +17,19 @@ def declare_variable(id, typ, value):
         return            
     variables[id] = (value, typ)
 
-def run(p):
-    if type(p) == tuple:
-        if p[0] == 'DECLARE':
-            declare_variable(p[2], p[1], p[3])
+def run(tree):
+    print(tree)
+    if type(tree) == tuple:
+        if tree[0] == 'declare':
+            declare_variable(tree[2], tree[1], tree[3])
+            print(variables)
+
 
 while True:
     try:
         s = input('>> ')
     except EOFError:
         break
-    yaplParser.parse(s)
+    tree = yaplParser.parse(s)
+    # print(tree)
+    run(tree)
