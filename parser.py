@@ -1,19 +1,7 @@
 import ply.yacc as yacc
+import lexer
+# tokens = lexer.tokens
 from lexer import tokens
-
-
-# Precedence rules for the arithmetic operators
-precedence = (
-    ('left','PLUS','MINUS'),
-    ('left','TIMES','DIVIDE'),
-    ('right','UMINUS'),
-    )
-
-# Dictionary of variable
-# key: identifier/name
-# value: tuple of literal value and type
-# e.g. 'myInt' : (5, 'int')
-variables = { }
 
 def _checkTypeError(value, valType):
     'Raises typeError if value does not match type'
@@ -28,22 +16,17 @@ def _checkTypeError(value, valType):
     if valType == 'bool' and not isinstance(value, bool):
         raise TypeError
 
-def p_statement_declare(p):
-    '''statement : DECLARE type ID
-                 | DECLARE type ID TO value'''
-    if p[3] in variables:
-        print('RedeclarationError')
-        return
-
-    value = None
-    try:
-        if len(p) == 6:
-            value = p[5]
-            _checkTypeError(value, p[2])
-        variables[p[3]] = (value, p[2])
-    except TypeError:
-        print("TypeError")
-    print(variables)
+def p_var_declare(p):
+    '''var_declare : DECLARE INT ID'''
+                #    | DECLARE INT ID TO value'''
+    if len(p) == 6:
+        try:
+            _checkTypeError(p[5], p[2])
+            p[0] = (p[1], p[2], p[3], p[5])
+        except TypeError:
+            print("TypeError")
+    else:
+        p[0] = (p[1], p[2], p[3], None)
 
 def p_value_literal(p):
     'value : literal'
@@ -84,10 +67,10 @@ def p_printvalue(p):
 
 def p_empty(p):
     'empty :'
-    pass
-# def p_statement_value(p):
-#     'statement : value'
-#     print(p[1])
+    p[0] = None
+def p_statement_value(p):
+    'statement : value'
+    print(p[1])
 
 def p_statement_assign(p):
     'statement : ASSIGN ID TO value'
@@ -135,13 +118,11 @@ def p_expression_number(p):
     'expression : number'
     p[0] = p[1]
 
-
 def p_error(p):
     print(f"Syntax error")
     # print(f"Syntax error at {p.value!r}")
 
 yacc.yacc()
-
 while True:
     try:
         s = input('>> ')

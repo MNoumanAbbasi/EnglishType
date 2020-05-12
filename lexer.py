@@ -18,14 +18,14 @@ tokens = [
     'ID','LITERAL',
     'INT', 'DOUBLE', 'CHAR', 'STRING', 'BOOL',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
-    'INCREM', 'DECREM',
+    # 'INCREM', 'DECREM',
     'LPAREN','RPAREN',
  ] + list(keywords.values())
 
 
 # Tokens
-t_INCREM = r'\+\+'
-t_DECREM = r'--'
+# t_INCREM = r'\+\+'
+# t_DECREM = r'--'
 t_PLUS   = r'\+'
 t_MINUS  = r'-'
 t_TIMES  = r'\*'
@@ -91,10 +91,10 @@ assign myint to 5+ 5++
 '''
 
 # Give the lexer some input
-lexer.input(data2)
+# lexer.input(data2)
 
-for tok in lexer:
-    print(tok)
+# for tok in lexer:
+#     print(tok)
 
 # if r'^true$/' == 
 #     print("OK")
