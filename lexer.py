@@ -35,8 +35,8 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 
 def t_BOOL(t):
-    r'true|false'
-    t.value = True if t.value == 'true' else False
+    r'True|False'
+    t.value = True if t.value == 'True' else False
     return t
 
 # t_ID   = r'[a-zA-Z_][a-zA-Z0-9_]*'
