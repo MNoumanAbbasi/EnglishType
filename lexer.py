@@ -49,12 +49,12 @@ def t_BOOL(t):
 # t_ID   = r'[a-zA-Z_][a-zA-Z0-9_]*'
 
 def t_DOUBLE(t):
-    r'[+-]?([0-9]*)?[.][0-9]+'
+    r'([0-9]*)?[.][0-9]+'
     t.value = float(t.value)
     return t
 
 def t_INT(t):
-    r'[+-]?[0-9]+'
+    r'[0-9]+'
     t.value = int(t.value)
     return t
 
@@ -93,7 +93,7 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-assign myint True 5,5 else to 5+ ;5++{}
+5+5 
 '''
 
 # Give the lexer some input

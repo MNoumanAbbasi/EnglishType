@@ -70,10 +70,13 @@ def eval_exp(tree, env):
     else:
         return tree[1]
 
-def postfix_inc_dec(var_id, postfix, env):
+def postfix_op(var_id, postfix, env):
     val = env_lookup(env, var_id)[1]
-    if postfix == "++": val += 1
-    if postfix == "--": val -= 1
+    try:
+        if postfix == "++": val += 1
+        if postfix == "--": val -= 1
+    except:
+        raise Exception('PostfixTypeError')
     env_update(env, var_id, val)
 
 def eval_stmt(tree, env):
@@ -89,7 +92,7 @@ def eval_stmt(tree, env):
     elif stmttype == "print":
         print_val(tree[1], env)
     elif stmttype == "postfix":
-        postfix_inc_dec(tree[1], tree[2], env)
+        postfix_op(tree[1], tree[2], env)
     elif stmttype == "if-else":
         _, condition_exp, then_stmts, else_stmts = tree
         if eval_exp(condition_exp):
@@ -145,7 +148,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    print(trees)
+    # print(trees)
     if trees is None:
         return
     for tree in trees:
