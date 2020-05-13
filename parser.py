@@ -28,38 +28,54 @@ def p_statement(p):
 
 def p_var_declare(p):
     '''var_declare : DECLARE type ID
-                   | DECLARE type ID TO value'''
+                   | DECLARE type ID TO expression'''
     if len(p) == 6:
         p[0] = ('declare', p[2], p[3], p[5])
     else:
         p[0] = ('declare', p[2], p[3], None)
 
 def p_var_assign(p):
-    'var_assign : SET ID TO value'
+    'var_assign : SET ID TO expression'
     p[0] = ('assign', p[2], p[4])
 
-def p_value_literal(p):
-    'value : literal'
-    p[0] = p[1]
+def p_expression_int(p):
+    'expression : INT'
+    p[0] = ('int', p[1])
 
-def p_value_expression(p):
-    'value : expression'
-    p[0] = p[1]
+def p_expression_double(p):
+    'expression : DOUBLE'
+    p[0] = ('double', p[1])
 
-def p_value_id(p):
-    'value : ID'
+def p_expression_char(p):
+    'expression : CHAR'
+    p[0] = ('char', p[1])
+
+def p_expression_string(p):
+    'expression : STRING'
+    p[0] = ('string', p[1])
+
+def p_expression_bool(p):
+    'expression : BOOL'
+    p[0] = ('bool', p[1])
+
+# def p_value_expression(p):
+#     'value : expression'
+#     p[0] = p[1]
+
+def p_expression_id(p):
+    'expression : ID'
     p[0] = ('id', p[1])
 
-def p_literal(p):
-    '''literal : CHAR
-               | STRING
-               | BOOL'''
-    p[0] = p[1]
+# def p_literal(p):
+#     '''literal : CHAR
+#                | STRING
+#                | BOOL'''
+#     p[0] = p[1]
 
-def p_number(p):
-    '''number : INT
-              | DOUBLE'''
-    p[0] = p[1]
+# def p_number(p):
+#     '''number : INT
+#               | DOUBLE'''
+#     p[0] = p[1]
 
 
 def p_print_val(p):
@@ -68,8 +84,8 @@ def p_print_val(p):
     # print(p[2])
 
 def p_printvalue(p):
-    '''printvalue : value printvalue
-                  | value'''
+    '''printvalue : expression printvalue
+                  | expression'''
     p[0] = str(p[1]) + (" " + str(p[2]) if len(p) == 3 else "")
 
 def p_empty(p):
@@ -107,9 +123,9 @@ def p_expression_group(p):
     'expression : LPAREN expression RPAREN'
     p[0] = p[2]
 
-def p_expression_number(p):
-    'expression : number'
-    p[0] = p[1]
+# def p_expression_number(p):
+#     'expression : number'
+#     p[0] = p[1]
 
 def p_error(p):
     try:

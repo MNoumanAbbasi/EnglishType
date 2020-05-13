@@ -9,6 +9,8 @@ yaplParser = yacc.yacc(module=parser, debug=True)
 # e.g. 'myInt' : (5, 'int')
 variables = { }
 
+env = {}
+
 def _checkTypeError(value, valType):
     'Raises typeError if value does not match type'
     if valType == 'int' and not isinstance(value, int):
@@ -51,18 +53,21 @@ def assign_variable(id, value):
     except TypeError:
         print("TypeError")
 
-def eval_exp(tree):
+def eval_exp(tree, env):
     nodetype = tree[0]
     if nodetype == "int" or nodetype == "double":
         return tree[1]
     elif nodetype == "binop":
         op = tree[2]
-        left  = eval_exp(tree[1])
-        right = eval_exp(tree[3])
+        left  = eval_exp(tree[1], env)
+        right = eval_exp(tree[3], env)
         if   op == '+': return left + right
         elif op == '-': return left - right
         elif op == '*': return left * right
         elif op == '/': return left / right
+    elif nodetype == "id":
+        var_id = tree[1]
+        return env_lookup(env, var_id)
 
 def env_lookup(env, var_id):
     pass

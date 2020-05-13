@@ -15,7 +15,7 @@ keywords = {
 
 # List of tokens types
 tokens = [
-    'ID','LITERAL',
+    'ID',
     'INT', 'DOUBLE', 'CHAR', 'STRING', 'BOOL',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
     # 'INCREM', 'DECREM',
