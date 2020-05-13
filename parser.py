@@ -2,7 +2,7 @@ import ply.yacc as yacc
 from lexer import tokens
 
 # All lines are statements
-start = 'statement'
+start = 'statements'
 
 # Precedence rules for the arithmetic operators
 precedence = (
@@ -11,21 +11,19 @@ precedence = (
     ('right','UMINUS'),
     )
 
-# def p_statements(p):
-#     '''statements : statements statement
-#                   | statement'''
-#     if len(p) == 2:
-#         p[0] = p[1] + [p[2]]
-#     else:
-#         p[0] = p[1]
-
-
+def p_statements(p):
+    '''statements : statements statement
+                  | statement
+                  | empty'''
+    if len(p) == 3:
+        p[0] = p[1] + [p[2]]
+    else:
+        p[0] = [p[1]]
 
 def p_statement(p):
     '''statement : var_declare SEMICL
                  | var_assign SEMICL
-                 | print_val SEMICL
-                 | empty'''
+                 | print_val SEMICL'''
     p[0] = p[1]
 
 def p_var_declare(p):

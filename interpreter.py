@@ -1,7 +1,7 @@
 import ply.yacc as yacc
 import parser
 import sys
-yaplParser = yacc.yacc(module=parser)
+yaplParser = yacc.yacc(module=parser, debug=True)
 
 # Dictionary of variable
 # key: identifier/name
@@ -51,36 +51,55 @@ def assign_variable(id, value):
     except TypeError:
         print("TypeError")
 
+def eval_exp(tree):
+    nodetype = tree[0]
+    if nodetype == "int" or nodetype == "double":
+        return tree[1]
+    # elif nodetype == "binop":
 
-def interpret(pt):
+def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    # print(pt)
-    if type(pt) == tuple:
-        if pt[0] == 'id':
-            return get_value_id(pt[1])
-        elif pt[0] == 'print':
-            print(interpret(pt[1]))
-        elif pt[0] == 'declare':
-            declare_variable(pt[2], interpret(pt[3]), pt[1])
-        elif pt[0] == 'assign':
-            assign_variable(pt[1], interpret(pt[2]))
+    for t in trees:
+        print(t)
+        if type(t) == tuple:    # t[0]: nodetype
+            if t[0] == 'id':
+                return get_value_id(t[1])
+            elif t[0] == 'print':
+                print(interpret(t[1]))
+            elif t[0] == 'declare':
+                declare_variable(t[2], interpret(t[3]), t[1])
+            elif t[0] == 'assign':
+                assign_variable(t[1], interpret(t[2]))
         # print(variables)
     else:
-        return pt
+        return t
 
+def run_file(filename):
+    with open(filename, 'r') as file:
+        content = file.read()
+        trees = yaplParser.parse(content)
+        # print(content)
+        interpret(trees)
 
-# while True:
-#     try:
-#         s = input('>> ')
-#     except EOFError:
-#         break
-#     tree = yaplParser.parse(s)
-#     # print(tree)
-#     interpret(tree)
+def run_terminal():
+    while True:
+        try:
+            s = input('>> ')
+        except EOFError:
+            break
+        if s == 'exit': break
+        tree = yaplParser.parse(s)
+        # print(tree)
+        interpret(tree)
 
-filename = 'test_cases/' + sys.argv[1]
-with open(filename, 'r') as file:
-    content = file.read()
-    tree = yaplParser.parse(content)
-    # print(content)
-    interpret(tree)
+def main():
+    # if text file provided
+    if len(sys.argv) == 2:
+        filename = 'test_cases/' + sys.argv[1]
+        run_file(filename)
+    # else open terminal input
+    else:
+        run_terminal()
+
+if __name__ == "__main__":
+    main()
