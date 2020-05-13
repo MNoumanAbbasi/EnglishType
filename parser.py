@@ -8,6 +8,7 @@ start = 'statements'
 precedence = (
     ('left','PLUS','MINUS'),
     ('left','TIMES','DIVIDE'),
+    ('right', 'POWER'),
     ('right','UMINUS'),
     )
 
@@ -48,7 +49,6 @@ def p_inc_dec(p):
     '''inc_dec : ID INCREM
                | ID DECREM'''
     p[0] = ('postfix', p[1], p[2])
-    print(p[0])
 
 def p_args(p):
     '''args : args COMMA expression
@@ -77,10 +77,6 @@ def p_expression_string(p):
 def p_expression_bool(p):
     'expression : BOOL'
     p[0] = ('bool', p[1])
-
-# def p_value_expression(p):
-#     'value : expression'
-#     p[0] = p[1]
 
 def p_expression_id(p):
     'expression : ID'
@@ -119,7 +115,7 @@ def p_empty(p):
 #     print(p[1])
 
 
-def p_type_datatype(p):
+def p_type(p):
     '''type : INT_TYPE
             | DOUBLE_TYPE
             | CHAR_TYPE
@@ -135,9 +131,11 @@ def p_expression_binop(p):
     '''expression : expression PLUS expression
                   | expression MINUS expression
                   | expression TIMES expression
-                  | expression DIVIDE expression'''
+                  | expression DIVIDE expression
+                  | expression POWER expression'''
     p[0] = ('binop', p[1], p[2], p[3])
 
+# TODO: Fix urany operator
 def p_expression_uminus(p):
     'expression : MINUS expression %prec UMINUS'
     p[0] = -p[2]

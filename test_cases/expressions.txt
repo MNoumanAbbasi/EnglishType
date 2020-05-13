@@ -4,4 +4,8 @@ declare int b to 4;
 b++;
 print mystring;
 declare double c to (1.5+0.5+1);
-declare double
+declare double determinant to b ^ 2 - 4 * a * c;
+declare double quadratic_root1 to (-b + determinant^(1/2)) / ( 2.0*2 )
+print quadratic_root1;
+
+declare bool d to False;

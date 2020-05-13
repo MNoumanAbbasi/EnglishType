@@ -19,7 +19,7 @@ keywords = {
 tokens = [
     'ID',
     'INT', 'DOUBLE', 'CHAR', 'STRING', 'BOOL',
-    'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
+    'PLUS','MINUS','TIMES','DIVIDE','POWER',
     'INCREM', 'DECREM',
     'LPAREN','RPAREN',
     'SEMICL', 'OPENBR', 'CLSEBR', 'COMMA',
@@ -33,13 +33,13 @@ t_PLUS   = r'\+'
 t_MINUS  = r'-'
 t_TIMES  = r'\*'
 t_DIVIDE = r'/'
-t_EQUALS = r'='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_SEMICL = r'\;'
 t_OPENBR = r'{'
 t_CLSEBR = r'}'
 t_COMMA  = r','
+t_POWER  = r'\^'
 
 def t_BOOL(t):
     r'True|False'
@@ -93,7 +93,7 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-5+5 
+5^7+5
 '''
 
 # Give the lexer some input
