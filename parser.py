@@ -11,9 +11,20 @@ precedence = (
     ('right','UMINUS'),
     )
 
+# def p_statements(p):
+#     '''statements : statements statement
+#                   | statement'''
+#     if len(p) == 2:
+#         p[0] = p[1] + [p[2]]
+#     else:
+#         p[0] = p[1]
+
+
+
 def p_statement(p):
-    '''statement : var_declare
-                 | var_assign
+    '''statement : var_declare SEMICL
+                 | var_assign SEMICL
+                 | print_val SEMICL
                  | empty'''
     p[0] = p[1]
 
@@ -53,15 +64,15 @@ def p_number(p):
     p[0] = p[1]
 
 
-def p_statement_print(p):
-    'statement : PRINT printvalue'
+def p_print_val(p):
+    'print_val : PRINT printvalue'
     p[0] = ('print', p[2])
     # print(p[2])
 
 def p_printvalue(p):
     '''printvalue : value printvalue
                   | value'''
-    p[0] = str(p[1]) + " " + (str(p[2]) if len(p) == 3 else "")
+    p[0] = str(p[1]) + (" " + str(p[2]) if len(p) == 3 else "")
 
 def p_empty(p):
     'empty :'
@@ -106,5 +117,7 @@ def p_expression_number(p):
     p[0] = p[1]
 
 def p_error(p):
-    # print(f"Syntax error")
-    print(f"Syntax error at {p.value!r}")
+    try:
+        print(f"Syntax error at {p.value!r}")
+    except:
+        print(f"Syntax error")

@@ -54,17 +54,17 @@ def assign_variable(id, value):
 
 def interpret(pt):
     'Runs the instructions in the passed Parse Tree'
-    print(pt)
+    # print(pt)
     if type(pt) == tuple:
         if pt[0] == 'id':
             return get_value_id(pt[1])
         elif pt[0] == 'print':
-            print(interpret(p[1]))
+            print(interpret(pt[1]))
         elif pt[0] == 'declare':
             declare_variable(pt[2], interpret(pt[3]), pt[1])
         elif pt[0] == 'assign':
             assign_variable(pt[1], interpret(pt[2]))
-        print(variables)
+        # print(variables)
     else:
         return pt
 
@@ -82,5 +82,5 @@ filename = 'test_cases/' + sys.argv[1]
 with open(filename, 'r') as file:
     content = file.read()
     tree = yaplParser.parse(content)
-    interpret(tree)
     # print(content)
+    interpret(tree)

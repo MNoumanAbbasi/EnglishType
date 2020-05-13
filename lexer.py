@@ -1,5 +1,5 @@
 import ply.lex as lex
-
+import sys
 # Reserved keywords
 keywords = {
     'declare' : 'DECLARE',
@@ -20,6 +20,7 @@ tokens = [
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
     # 'INCREM', 'DECREM',
     'LPAREN','RPAREN',
+    'SEMICL',
  ] + list(keywords.values())
 
 
@@ -33,6 +34,7 @@ t_DIVIDE = r'/'
 t_EQUALS = r'='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_SEMICL = r'\;'
 
 def t_BOOL(t):
     r'True|False'
@@ -63,7 +65,7 @@ def t_STRING(t):
     return t
 
 # Ignored characters
-t_ignore = " \t"
+t_ignore = ' \t\v\r'
 
 def t_newline(t):
     r'\n+'
@@ -87,11 +89,15 @@ data = '''
 '''
 data2 = '''
 declare myint - int --
-assign myint to 5+ 5++
+assign myint to 5+ ;5++;
 '''
 
 # Give the lexer some input
 # lexer.input(data2)
+# filename = 'test_cases/' + sys.argv[1]
+# with open(filename, 'r') as file:
+#     content = file.read()
+#     lexer.input(content)
 
 # for tok in lexer:
 #     print(tok)
