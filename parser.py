@@ -24,7 +24,7 @@ def p_statement(p):
     '''statement : var_declare SEMICL
                  | var_assign SEMICL
                  | print_val SEMICL'''
-    p[0] = p[1]
+    p[0] = ('stmt', p[1])
 
 def p_var_declare(p):
     '''var_declare : DECLARE type ID
@@ -84,16 +84,24 @@ def p_if_else(p):
 #               | DOUBLE'''
 #     p[0] = p[1]
 
+# args is a list of tuples
+def p_args(p):
+    '''args : args COMMA expression
+            | expression'''
+    if len(p) == 4:
+        p[0] = p[1] + [p[3]]
+    else:
+        p[0] = [p[1]]
 
 def p_print_val(p):
-    'print_val : PRINT printvalue'
+    'print_val : PRINT args'
+    # args are a list of arguments (tuples)
     p[0] = ('print', p[2])
-    # print(p[2])
 
-def p_printvalue(p):
-    '''printvalue : expression printvalue
-                  | expression'''
-    p[0] = str(p[1]) + (" " + str(p[2]) if len(p) == 3 else "")
+# def p_printvalue(p):
+#     '''printvalue : expression printvalue
+#                   | expression'''
+#     p[0] = str(p[1]) + (" " + str(p[2]) if len(p) == 3 else "")
 
 def p_empty(p):
     'empty :'

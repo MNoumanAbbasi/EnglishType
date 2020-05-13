@@ -8,6 +8,7 @@ yaplParser = yacc.yacc(module=parser, debug=True)
 # value: tuple of literal value and type
 # e.g. 'myInt' : (5, 'int')
 variables = { }
+global_env = { }
 
 def _checkTypeError(value, valType):
     'Raises typeError if value does not match type'
@@ -83,6 +84,10 @@ def eval_stmt(tree, env):
             eval_stmts(then_stmts, env)
         else:
             eval_stmts(else_stmts, env)
+    elif stmttype == "exp":
+        eval_exp(tree[1], env)
+    elif stmttype == "print":
+        print_val(tree[1], env)
 
 def eval_stmts(stmts, env):
     for stmt in stmts:
@@ -98,26 +103,28 @@ def env_lookup(env, var_id):
 def env_update(env, var_id, new_val):
     env[var_id] = new_val
 
-def print_val(tree):
-    if tree is None:
-        return
-    print(tree)
+def print_val(args, env):
+    for arg in args or []:
+        exp = eval_exp(arg, env)
+        print(exp, end=' ')
+    print()
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
+    # print(trees)
     if trees is None:
         return
     for tree in trees:
         nodetype = tree[0]
         if type(tree) == tuple:
-            if nodetype == 'id':
-                return get_value_id(tree[1])
-            elif nodetype == 'print':
-                print_val(tree[1])
-            elif nodetype == 'declare':
-                declare_variable(tree[2], interpret(tree[3]), tree[1])
-            elif nodetype == 'assign':
-                assign_variable(tree[1], interpret(tree[2]))
+            if nodetype == 'stmt':
+                eval_stmt(tree[1], global_env)
+            # elif nodetype == 'print':
+            #     print_val(tree[1])
+            # elif nodetype == 'declare':
+            #     declare_variable(tree[2], interpret(tree[3]), tree[1])
+            # elif nodetype == 'assign':
+            #     assign_variable(tree[1], interpret(tree[2]))
             # elif nodetype == 'binop':
             #     eval_exp(t)
         # print(variables)
@@ -146,6 +153,7 @@ def run_terminal():
         interpret(trees)
 
 def main():
+    # print()
     # if text file provided
     if len(sys.argv) == 2:
         filename = 'test_cases/' + sys.argv[1]
