@@ -4,7 +4,7 @@ from lexer import tokens
 # All lines are statements
 start = 'statements'
 
-# Precedence rules for the arithmetic operators
+# Precedence rules for the operators
 precedence = (
     ('left','PLUS','MINUS'),
     ('left','TIMES','DIVIDE'),
@@ -45,11 +45,6 @@ def p_print_val(p):
     # args are a list of arguments (tuples)
     p[0] = ('print', p[2])
 
-def p_inc_dec(p):
-    '''inc_dec : ID INCREM
-               | ID DECREM'''
-    p[0] = ('postfix', p[1], p[2])
-
 def p_args(p):
     '''args : args COMMA expression
             | expression'''
@@ -57,6 +52,12 @@ def p_args(p):
         p[0] = p[1] + [p[3]]
     else:
         p[0] = [p[1]]
+
+def p_inc_dec(p):
+    '''inc_dec : ID INCREM
+               | ID DECREM'''
+    p[0] = ('postfix', p[1], p[2])
+
 
 def p_expression_int(p):
     'expression : INT'
@@ -90,31 +91,14 @@ def p_if_else(p):
     else:
         p[0] = ('if-else', p[2], p[4], None)
 
-# def p_literal(p):
-#     '''literal : CHAR
-#                | STRING
-#                | BOOL'''
-#     p[0] = p[1]
-
 # def p_number(p):
 #     '''number : INT
 #               | DOUBLE'''
 #     p[0] = p[1]
 
-# args is a list of tuples
-
-# def p_printvalue(p):
-#     '''printvalue : expression printvalue
-#                   | expression'''
-#     p[0] = str(p[1]) + (" " + str(p[2]) if len(p) == 3 else "")
-
 def p_empty(p):
     'empty :'
     p[0] = None
-# def p_statement_value(p):
-#     'statement : value'
-#     print(p[1])
-
 
 def p_type(p):
     '''type : INT_TYPE
@@ -127,7 +111,20 @@ def p_type(p):
 # def p_statement_expr(p):
 #     'statement : expression'
 #     print(p[1])
-# def p_expression_
+def p_expression_logop(p):
+    '''expression : expression LT expression
+                  | expression GT expression
+                  | expression LTE expression
+                  | expression GTE expression
+                  | expression NOTEQ expression
+                  | expression EQ expression
+                  | expression AND expression
+                  | expression OR expression'''
+    p[0] = ('logop', p[1], p[2], p[3])
+
+def p_expression_not(p):
+    'expression : NOT expression'
+    p[0] = ('not', p[2])
 
 def p_expression_binop(p):
     '''expression : expression PLUS expression

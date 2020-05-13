@@ -58,6 +58,8 @@ def eval_exp(tree, env):
         return tree[1]
     elif exptype == "unary":
         return -eval_exp(tree[1], env)
+    elif exptype == "not":
+        return not eval_exp(tree[1], env)
     elif exptype == "binop":
         op = tree[2]
         left  = eval_exp(tree[1], env)
@@ -68,6 +70,18 @@ def eval_exp(tree, env):
         elif op == '/': return left / right
         elif op == '^': return left ** right
         elif op == '%': return left % right
+    elif exptype == "logop":
+        op = tree[2]
+        left  = eval_exp(tree[1], env)
+        right = eval_exp(tree[3], env)
+        if   op == '<': return left < right
+        elif op == '>': return left > right
+        elif op == '<=': return left <= right
+        elif op == '>=': return left >= right
+        elif op == 'NOTEQUALS': return left != right
+        elif op == 'EQUALS': return left <= right
+        elif op == 'AND': return left and right
+        elif op == 'OR': return left or right
     elif exptype == "id":
         var_id = tree[1]
         return env_lookup(env, var_id)[1]
@@ -156,7 +170,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    print(trees)
+    # print(trees)
     if trees is None:
         return
     for tree in trees:

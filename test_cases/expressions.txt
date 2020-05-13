@@ -3,10 +3,12 @@ DECLARE INT a TO 1;
 DECLARE INT b TO 4;
 b++;
 PRINT mystring;
-DECLARE DOUBLE c TO (1.5+0.5+1);
+DECLARE DOUBLE c TO (1.5+0.5+2);
 DECLARE DOUBLE determinant TO b ^ 2 - 4 * a * c;
-DECLARE DOUBLE quadratic_root1 TO (-b + determinant^(1/2)) / ( 2.0*2 );
+DECLARE DOUBLE quadratic_root1 TO (-b + determinant^(1/2)) / ( 2.0*a );
 PRINT quadratic_root1;
 
 DECLARE BOOL d TO False;
-PRINT (NOT True == (NOT ) 
+PRINT(NOT True EQUALS (NOT (NOT d)) AND (True NOTEQUALS 0));
+PRINT (4 + "A");
+PRINT ("Hi");

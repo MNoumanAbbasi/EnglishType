@@ -52,11 +52,22 @@ t_LT     = r'<'
 t_GT     = r'>'
 t_LTE    = r'<='
 t_GTE    = r'>='
-t_NOTEQ  = r'NOTEQUALS'
-t_EQ     = r'EQUALS'
-t_NOT    = r'NOT'
-t_AND    = r'AND'
-t_OR     = r'OR'
+
+def t_NOTEQ(t):
+    r'NOTEQUALS'
+    return t
+def t_EQ(t):
+    r'EQUALS'
+    return t
+def t_NOT(t):
+    r'NOT'
+    return t
+def t_AND(t):
+    r'AND'
+    return t
+def t_OR(t):
+    r'OR'
+    return t
 
 def t_BOOL(t):
     r'True|False'
@@ -109,7 +120,7 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-5^7+5<>=NOT % NOTEQUALS
+5^7+5<>= NOT % NOTEQUALS
 '''
 
 # Give the lexer some input
