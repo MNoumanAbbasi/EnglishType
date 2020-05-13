@@ -55,29 +55,49 @@ def eval_exp(tree):
     nodetype = tree[0]
     if nodetype == "int" or nodetype == "double":
         return tree[1]
-    # elif nodetype == "binop":
+    elif nodetype == "binop":
+        op = tree[2]
+        left  = eval_exp(tree[1])
+        right = eval_exp(tree[3])
+        if   op == '+': return left + right
+        elif op == '-': return left - right
+        elif op == '*': return left * right
+        elif op == '/': return left / right
+
+def env_lookup(env, var_id):
+    pass
+
+def print_val(tree):
+    print(tree)
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
+    if trees is None:
+        return
     for t in trees:
-        print(t)
-        if type(t) == tuple:    # t[0]: nodetype
-            if t[0] == 'id':
+        nodetype = t[0]
+        if type(t) == tuple:
+            if nodetype == 'id':
                 return get_value_id(t[1])
-            elif t[0] == 'print':
-                print(interpret(t[1]))
-            elif t[0] == 'declare':
+            elif nodetype == 'print':
+                print_val(t[1])
+            elif nodetype == 'declare':
                 declare_variable(t[2], interpret(t[3]), t[1])
-            elif t[0] == 'assign':
+            elif nodetype == 'assign':
                 assign_variable(t[1], interpret(t[2]))
+            # elif nodetype == 'binop':
+            #     eval_exp(t)
         # print(variables)
-    else:
-        return t
+        else:
+            return t
 
 def run_file(filename):
     with open(filename, 'r') as file:
         content = file.read()
-        trees = yaplParser.parse(content)
+        try:
+            trees = yaplParser.parse(content)
+        except Exception as e:
+            print(e)
         # print(content)
         interpret(trees)
 
@@ -88,9 +108,9 @@ def run_terminal():
         except EOFError:
             break
         if s == 'exit': break
-        tree = yaplParser.parse(s)
-        # print(tree)
-        interpret(tree)
+        trees = yaplParser.parse(s)
+        # print(trees)
+        interpret(trees)
 
 def main():
     # if text file provided
