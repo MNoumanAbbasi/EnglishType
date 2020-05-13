@@ -15,16 +15,21 @@ keywords = {
     'ELSE' : 'ELSE',
 }
 
+numerical_ops = ['PLUS','MINUS','TIMES','DIVIDE','POWER', 'MOD']
+logical_ops = [
+    'LT', 'GT', 'LTE', 'GTE', 'NOTEQ', 'EQ',
+    'NOT', 'AND', 'OR',
+]
+
 # List of tokens types
 tokens = [
     'ID',
     'INT', 'DOUBLE', 'CHAR', 'STRING', 'BOOL',
-    'PLUS','MINUS','TIMES','DIVIDE','POWER',
     'INCREM', 'DECREM',
     'LPAREN','RPAREN',
     'SEMICL', 'OPENBR', 'CLSEBR', 'COMMA',
-    'NOT',
- ] + list(keywords.values())
+ ] + list(keywords.values()) + numerical_ops + logical_ops
+
 
 
 # Tokens
@@ -41,7 +46,17 @@ t_OPENBR = r'{'
 t_CLSEBR = r'}'
 t_COMMA  = r','
 t_POWER  = r'\^'
+t_MOD    = r'%'
+
+t_LT     = r'<'
+t_GT     = r'>'
+t_LTE    = r'<='
+t_GTE    = r'>='
+t_NOTEQ  = r'NOTEQUALS'
+t_EQ     = r'EQUALS'
 t_NOT    = r'NOT'
+t_AND    = r'AND'
+t_OR     = r'OR'
 
 def t_BOOL(t):
     r'True|False'
@@ -94,7 +109,7 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-5^7+5
+5^7+5<>=NOT % NOTEQUALS
 '''
 
 # Give the lexer some input
@@ -103,6 +118,6 @@ data2 = '''
 #     content = file.read()
 #     lexer.input(content)
 
-# lexer.input(data2)
-# for tok in lexer:
-#     print(tok)
+lexer.input(data2)
+for tok in lexer:
+    print(tok)

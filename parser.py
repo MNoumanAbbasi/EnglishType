@@ -89,6 +89,7 @@ def p_if_else(p):
         p[0] = ('if-else', p[2], p[4], p[8])
     else:
         p[0] = ('if-else', p[2], p[4], None)
+
 # def p_literal(p):
 #     '''literal : CHAR
 #                | STRING
@@ -126,13 +127,15 @@ def p_type(p):
 # def p_statement_expr(p):
 #     'statement : expression'
 #     print(p[1])
+# def p_expression_
 
 def p_expression_binop(p):
     '''expression : expression PLUS expression
                   | expression MINUS expression
                   | expression TIMES expression
                   | expression DIVIDE expression
-                  | expression POWER expression'''
+                  | expression POWER expression
+                  | expression MOD expression'''
     p[0] = ('binop', p[1], p[2], p[3])
 
 def p_expression_uminus(p):

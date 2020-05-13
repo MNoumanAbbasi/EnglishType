@@ -67,6 +67,7 @@ def eval_exp(tree, env):
         elif op == '*': return left * right
         elif op == '/': return left / right
         elif op == '^': return left ** right
+        elif op == '%': return left % right
     elif exptype == "id":
         var_id = tree[1]
         return env_lookup(env, var_id)[1]
