@@ -9,8 +9,6 @@ yaplParser = yacc.yacc(module=parser, debug=True)
 # e.g. 'myInt' : (5, 'int')
 variables = { }
 
-env = {}
-
 def _checkTypeError(value, valType):
     'Raises typeError if value does not match type'
     if valType == 'int' and not isinstance(value, int):
@@ -54,10 +52,10 @@ def assign_variable(id, value):
         print("TypeError")
 
 def eval_exp(tree, env):
-    nodetype = tree[0]
-    if nodetype == "int" or nodetype == "double":
+    exptype = tree[0]
+    if exptype == "int" or exptype == "double":
         return tree[1]
-    elif nodetype == "binop":
+    elif exptype == "binop":
         op = tree[2]
         left  = eval_exp(tree[1], env)
         right = eval_exp(tree[3], env)
@@ -65,36 +63,66 @@ def eval_exp(tree, env):
         elif op == '-': return left - right
         elif op == '*': return left * right
         elif op == '/': return left / right
-    elif nodetype == "id":
+    elif exptype == "id":
         var_id = tree[1]
         return env_lookup(env, var_id)
 
+def eval_stmt(tree, env):
+    stmttype = tree[0]
+    if stmttype == "declare":
+        _, var_id, var_type, exp = tree
+        new_val = eval_exp(exp, env)
+        env_declare(env, var_id, new_val)
+    elif stmttype == "assign":
+        _, var_id, exp = tree
+        new_val = eval_exp(exp, env)
+        env_update(env, var_id, new_val)
+    elif stmttype == "if-else":
+        _, condition_exp, then_stmts, else_stmts = tree
+        if eval_exp(condition_exp):
+            eval_stmts(then_stmts, env)
+        else:
+            eval_stmts(else_stmts, env)
+
+def eval_stmts(stmts, env):
+    for stmt in stmts:
+        eval_stmt(stmt, env)
+
 def env_lookup(env, var_id):
-    pass
+    try:
+        varType = env[var_id][1]
+        env[var_id] = (value, varType)   # making new tuple since tuples immutable
+    except LookupError:
+        print(f"Undeclared variable name/id {id!r}")
+
+def env_update(env, var_id, new_val):
+    env[var_id] = new_val
 
 def print_val(tree):
+    if tree is None:
+        return
     print(tree)
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
     if trees is None:
         return
-    for t in trees:
-        nodetype = t[0]
-        if type(t) == tuple:
+    for tree in trees:
+        nodetype = tree[0]
+        if type(tree) == tuple:
             if nodetype == 'id':
-                return get_value_id(t[1])
+                return get_value_id(tree[1])
             elif nodetype == 'print':
-                print_val(t[1])
+                print_val(tree[1])
             elif nodetype == 'declare':
-                declare_variable(t[2], interpret(t[3]), t[1])
+                declare_variable(tree[2], interpret(tree[3]), tree[1])
             elif nodetype == 'assign':
-                assign_variable(t[1], interpret(t[2]))
+                assign_variable(tree[1], interpret(tree[2]))
             # elif nodetype == 'binop':
             #     eval_exp(t)
         # print(variables)
         else:
-            return t
+            return tree
 
 def run_file(filename):
     with open(filename, 'r') as file:

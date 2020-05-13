@@ -11,6 +11,8 @@ keywords = {
     'string' : 'STRING_TYPE',
     'bool' : 'BOOL_TYPE',
     'to' : 'TO',
+    'if' : 'IF',
+    'else' : 'ELSE',
 }
 
 # List of tokens types
@@ -20,7 +22,7 @@ tokens = [
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
     # 'INCREM', 'DECREM',
     'LPAREN','RPAREN',
-    'SEMICL',
+    'SEMICL', 'OPENBR', 'CLSEBR'
  ] + list(keywords.values())
 
 
@@ -35,6 +37,8 @@ t_EQUALS = r'='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_SEMICL = r'\;'
+t_OPENBR = r'{'
+t_CLSEBR = r'}'
 
 def t_BOOL(t):
     r'True|False'
@@ -88,16 +92,15 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-declare myint - int --
-assign myint to 5+ ;5++;
+assign myint else to 5+ ;5++{}
 '''
 
 # Give the lexer some input
-# lexer.input(data2)
+lexer.input(data2)
 # filename = 'test_cases/' + sys.argv[1]
 # with open(filename, 'r') as file:
 #     content = file.read()
 #     lexer.input(content)
 
-# for tok in lexer:
-#     print(tok)
+for tok in lexer:
+    print(tok)

@@ -30,9 +30,9 @@ def p_var_declare(p):
     '''var_declare : DECLARE type ID
                    | DECLARE type ID TO expression'''
     if len(p) == 6:
-        p[0] = ('declare', p[2], p[3], p[5])
+        p[0] = ('declare', p[3], p[2], p[5])
     else:
-        p[0] = ('declare', p[2], p[3], None)
+        p[0] = ('declare', p[3], p[2], None)
 
 def p_var_assign(p):
     'var_assign : SET ID TO expression'
@@ -66,6 +66,13 @@ def p_expression_id(p):
     'expression : ID'
     p[0] = ('id', p[1])
 
+def p_if_else(p):
+    '''statements : IF expression OPENBR statements CLSEBR
+                  | IF expression OPENBR statements CLSEBR ELSE OPENBR statements CLSEBR'''
+    if len(p) == 10:
+        p[0] = ('if-else', p[2], p[4], p[8])
+    else:
+        p[0] = ('if-else', p[2], p[4], None)
 # def p_literal(p):
 #     '''literal : CHAR
 #                | STRING
