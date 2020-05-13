@@ -21,13 +21,9 @@ def p_var_declare(p):
     '''var_declare : DECLARE type ID
                    | DECLARE type ID TO value'''
     if len(p) == 6:
-        # try:
-            # _checkTypeError(p[5], p[2])
         p[0] = ('declare', p[2], p[3], p[5])
-        # except TypeError:
-            # print("TypeError")
     else:
-        p[0] = (p[1], p[2], p[3], None)
+        p[0] = ('declare', p[2], p[3], None)
 
 def p_var_assign(p):
     'var_assign : SET ID TO value'
@@ -59,7 +55,8 @@ def p_number(p):
 
 def p_statement_print(p):
     'statement : PRINT printvalue'
-    print(p[2])
+    p[0] = ('print', p[2])
+    # print(p[2])
 
 def p_printvalue(p):
     '''printvalue : value printvalue

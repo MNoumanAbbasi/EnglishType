@@ -1,7 +1,7 @@
 import ply.yacc as yacc
 import parser
+import sys
 yaplParser = yacc.yacc(module=parser)
-
 
 # Dictionary of variable
 # key: identifier/name
@@ -58,6 +58,8 @@ def interpret(pt):
     if type(pt) == tuple:
         if pt[0] == 'id':
             return get_value_id(pt[1])
+        elif pt[0] == 'print':
+            print(interpret(p[1]))
         elif pt[0] == 'declare':
             declare_variable(pt[2], interpret(pt[3]), pt[1])
         elif pt[0] == 'assign':
@@ -67,11 +69,18 @@ def interpret(pt):
         return pt
 
 
-while True:
-    try:
-        s = input('>> ')
-    except EOFError:
-        break
-    tree = yaplParser.parse(s)
-    # print(tree)
+# while True:
+#     try:
+#         s = input('>> ')
+#     except EOFError:
+#         break
+#     tree = yaplParser.parse(s)
+#     # print(tree)
+#     interpret(tree)
+
+filename = 'test_cases/' + sys.argv[1]
+with open(filename, 'r') as file:
+    content = file.read()
+    tree = yaplParser.parse(content)
     interpret(tree)
+    # print(content)
