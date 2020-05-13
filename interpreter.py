@@ -56,7 +56,9 @@ def eval_exp(tree, env):
     exptype = tree[0]
     if exptype == "int" or exptype == "double":
         return tree[1]
-    if exptype == "binop":
+    elif exptype == "unary":
+        return -eval_exp(tree[1], env)
+    elif exptype == "binop":
         op = tree[2]
         left  = eval_exp(tree[1], env)
         right = eval_exp(tree[3], env)
@@ -77,6 +79,7 @@ def postfix_op(var_id, postfix, env):
         if postfix == "++": val += 1
         if postfix == "--": val -= 1
     except:
+        print("PostfixTypeError")
         raise Exception('PostfixTypeError')
     env_update(env, var_id, val)
 
@@ -110,6 +113,7 @@ def eval_stmts(stmts, env):
 def env_declare(env, var_id, var_type, new_val):
     parent_env, curr_env = env
     if var_id in curr_env:
+        print('RedeclarationError')
         raise Exception('RedeclarationError')
     else:
         _checkTypeError(new_val, var_type)
@@ -120,6 +124,7 @@ def env_lookup(env, var_id):
     if var_id in curr_env:      # if in current env
         return curr_env[var_id]
     elif parent_env == None:    # if not even in global env
+        print('LookupError')
         raise LookupError
     else:                       # else look in parent
         return env_lookup(parent_env, var_id)
@@ -136,6 +141,7 @@ def env_update(env, var_id, new_val):
         _checkTypeError(new_val, var_type)
         curr_env[var_id] = (var_type, new_val)
     elif parent_env == None:    # Remove this since lookup already done
+        print('LookupError')
         raise LookupError
     else:
         env_update(parent_env, var_id, new_val)
@@ -149,7 +155,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    # print(trees)
+    print(trees)
     if trees is None:
         return
     for tree in trees:

@@ -2,17 +2,17 @@ import ply.lex as lex
 import sys
 # Reserved keywords
 keywords = {
-    'declare' : 'DECLARE',
-    'set' : 'SET',
-    'print' : 'PRINT',
-    'int' : 'INT_TYPE',
-    'double' : 'DOUBLE_TYPE',
-    'char' : 'CHAR_TYPE',
-    'string' : 'STRING_TYPE',
-    'bool' : 'BOOL_TYPE',
-    'to' : 'TO',
-    'if' : 'IF',
-    'else' : 'ELSE',
+    'DECLARE' : 'DECLARE',
+    'SET' : 'SET',
+    'PRINT' : 'PRINT',
+    'INT' : 'INT_TYPE',
+    'DOUBLE' : 'DOUBLE_TYPE',
+    'CHAR' : 'CHAR_TYPE',
+    'STRING' : 'STRING_TYPE',
+    'BOOL' : 'BOOL_TYPE',
+    'TO' : 'TO',
+    'IF' : 'IF',
+    'ELSE' : 'ELSE',
 }
 
 # List of tokens types
@@ -23,6 +23,7 @@ tokens = [
     'INCREM', 'DECREM',
     'LPAREN','RPAREN',
     'SEMICL', 'OPENBR', 'CLSEBR', 'COMMA',
+    'NOT',
  ] + list(keywords.values())
 
 
@@ -40,6 +41,7 @@ t_OPENBR = r'{'
 t_CLSEBR = r'}'
 t_COMMA  = r','
 t_POWER  = r'\^'
+t_NOT    = r'NOT'
 
 def t_BOOL(t):
     r'True|False'
@@ -57,7 +59,6 @@ def t_INT(t):
     r'[0-9]+'
     t.value = int(t.value)
     return t
-
 
 def t_CHAR(t):
     r'\'(.+?)\''

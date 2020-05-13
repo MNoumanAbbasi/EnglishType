@@ -135,10 +135,9 @@ def p_expression_binop(p):
                   | expression POWER expression'''
     p[0] = ('binop', p[1], p[2], p[3])
 
-# TODO: Fix urany operator
 def p_expression_uminus(p):
     'expression : MINUS expression %prec UMINUS'
-    p[0] = -p[2]
+    p[0] = ('unary', p[2])
 
 def p_expression_group(p):
     'expression : LPAREN expression RPAREN'
