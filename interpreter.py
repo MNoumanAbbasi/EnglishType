@@ -70,6 +70,12 @@ def eval_exp(tree, env):
     else:
         return tree[1]
 
+def postfix_inc_dec(var_id, postfix, env):
+    val = env_lookup(env, var_id)[1]
+    if postfix == "++": val += 1
+    if postfix == "--": val -= 1
+    env_update(env, var_id, val)
+
 def eval_stmt(tree, env):
     stmttype = tree[0]
     if stmttype == "declare":
@@ -79,8 +85,11 @@ def eval_stmt(tree, env):
     elif stmttype == "assign":
         _, var_id, exp = tree
         new_val = eval_exp(exp, env)
-        var_type = env_lookup(env, var_id)[0]
-        env_update(env, var_id, var_type, new_val)
+        env_update(env, var_id, new_val)
+    elif stmttype == "print":
+        print_val(tree[1], env)
+    elif stmttype == "postfix":
+        postfix_inc_dec(tree[1], tree[2], env)
     elif stmttype == "if-else":
         _, condition_exp, then_stmts, else_stmts = tree
         if eval_exp(condition_exp):
@@ -89,8 +98,6 @@ def eval_stmt(tree, env):
             eval_stmts(else_stmts, env)
     elif stmttype == "exp":
         eval_exp(tree[1], env)
-    elif stmttype == "print":
-        print_val(tree[1], env)
 
 def eval_stmts(stmts, env):
     for stmt in stmts:
@@ -118,15 +125,16 @@ def env_lookup(env, var_id):
     # except LookupError:
     #     print(f"Undeclared variable name/id {id!r}")
 
-def env_update(env, var_id, var_type, new_val):
+def env_update(env, var_id, new_val):
     parent_env, curr_env = env
     if var_id in curr_env:
+        var_type = curr_env[var_id][0]
         _checkTypeError(new_val, var_type)
         curr_env[var_id] = (var_type, new_val)
     elif parent_env == None:    # Remove this since lookup already done
         raise LookupError
     else:
-        env_update(parent_env, var_id, var_type, new_val)
+        env_update(parent_env, var_id, new_val)
 
 
 def print_val(args, env):
@@ -137,7 +145,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    # print(trees)
+    print(trees)
     if trees is None:
         return
     for tree in trees:

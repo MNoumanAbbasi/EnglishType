@@ -20,15 +20,15 @@ tokens = [
     'ID',
     'INT', 'DOUBLE', 'CHAR', 'STRING', 'BOOL',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
-    # 'INCREM', 'DECREM',
+    'INCREM', 'DECREM',
     'LPAREN','RPAREN',
     'SEMICL', 'OPENBR', 'CLSEBR', 'COMMA',
  ] + list(keywords.values())
 
 
 # Tokens
-# t_INCREM = r'\+\+'
-# t_DECREM = r'--'
+t_INCREM = r'\+\+'
+t_DECREM = r'--'
 t_PLUS   = r'\+'
 t_MINUS  = r'-'
 t_TIMES  = r'\*'

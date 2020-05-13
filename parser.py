@@ -23,7 +23,8 @@ def p_statements(p):
 def p_statement(p):
     '''statement : var_declare SEMICL
                  | var_assign SEMICL
-                 | print_val SEMICL'''
+                 | print_val SEMICL
+                 | inc_dec SEMICL'''
     p[0] = ('stmt', p[1])
 
 def p_var_declare(p):
@@ -37,6 +38,25 @@ def p_var_declare(p):
 def p_var_assign(p):
     'var_assign : SET ID TO expression'
     p[0] = ('assign', p[2], p[4])
+
+def p_print_val(p):
+    'print_val : PRINT args'
+    # args are a list of arguments (tuples)
+    p[0] = ('print', p[2])
+
+def p_inc_dec(p):
+    '''inc_dec : ID INCREM
+               | ID DECREM'''
+    p[0] = ('postfix', p[1], p[2])
+    print(p[0])
+
+def p_args(p):
+    '''args : args COMMA expression
+            | expression'''
+    if len(p) == 4:
+        p[0] = p[1] + [p[3]]
+    else:
+        p[0] = [p[1]]
 
 def p_expression_int(p):
     'expression : INT'
@@ -85,18 +105,6 @@ def p_if_else(p):
 #     p[0] = p[1]
 
 # args is a list of tuples
-def p_args(p):
-    '''args : args COMMA expression
-            | expression'''
-    if len(p) == 4:
-        p[0] = p[1] + [p[3]]
-    else:
-        p[0] = [p[1]]
-
-def p_print_val(p):
-    'print_val : PRINT args'
-    # args are a list of arguments (tuples)
-    p[0] = ('print', p[2])
 
 # def p_printvalue(p):
 #     '''printvalue : expression printvalue
