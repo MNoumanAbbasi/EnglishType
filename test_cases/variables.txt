@@ -4,7 +4,8 @@ declare double c to 2.5;
 declare bool d to False;
 declare int e to 0;
 declare string f to "end";
-print a
-print b, c
-print d, e
-print a
+print a;
+print b, c;
+print d, e;
+print f;
+declare int e to 5;

@@ -66,7 +66,7 @@ def eval_exp(tree, env):
         elif op == '/': return left / right
     elif exptype == "id":
         var_id = tree[1]
-        return env_lookup(env, var_id)
+        return env_lookup(env, var_id)[1]
     else:
         return tree[1]
 
@@ -79,7 +79,8 @@ def eval_stmt(tree, env):
     elif stmttype == "assign":
         _, var_id, exp = tree
         new_val = eval_exp(exp, env)
-        env_update(env, var_id, new_val)
+        var_type = env_lookup(env, var_id)[0]
+        env_update(env, var_id, var_type, new_val)
     elif stmttype == "if-else":
         _, condition_exp, then_stmts, else_stmts = tree
         if eval_exp(condition_exp):
@@ -98,7 +99,7 @@ def eval_stmts(stmts, env):
 def env_declare(env, var_id, var_type, new_val):
     parent_env, curr_env = env
     if var_id in curr_env:
-        raise EOFError
+        raise Exception('RedeclarationError')
     else:
         _checkTypeError(new_val, var_type)
         curr_env[var_id] = (var_type, new_val)
@@ -117,14 +118,15 @@ def env_lookup(env, var_id):
     # except LookupError:
     #     print(f"Undeclared variable name/id {id!r}")
 
-def env_update(env, var_id, new_val):
+def env_update(env, var_id, var_type, new_val):
     parent_env, curr_env = env
     if var_id in curr_env:
-        curr_env[var_id] = new_val
-    elif parent_env == None:
+        _checkTypeError(new_val, var_type)
+        curr_env[var_id] = (var_type, new_val)
+    elif parent_env == None:    # Remove this since lookup already done
         raise LookupError
     else:
-        env_update(parent_env, var_id, new_val)
+        env_update(parent_env, var_id, var_type, new_val)
 
 
 def print_val(args, env):
@@ -135,7 +137,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    print(trees)
+    # print(trees)
     if trees is None:
         return
     for tree in trees:
@@ -143,15 +145,6 @@ def interpret(trees):
         if type(tree) is tuple:
             if nodetype == 'stmt':
                 eval_stmt(tree[1], global_env)
-            # elif nodetype == 'print':
-            #     print_val(tree[1])
-            # elif nodetype == 'declare':
-            #     declare_variable(tree[2], interpret(tree[3]), tree[1])
-            # elif nodetype == 'assign':
-            #     assign_variable(tree[1], interpret(tree[2]))
-            # elif nodetype == 'binop':
-            #     eval_exp(t)
-        # print(variables)
         else:
             return tree
 
@@ -178,7 +171,7 @@ def run_terminal():
         except Exception as e:
             print('Error:', e)
         # print(trees)
-        print(global_env)
+        # print(global_env)
 
 def main():
     # print()
