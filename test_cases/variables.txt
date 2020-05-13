@@ -5,6 +5,6 @@ declare bool d to False;
 declare int e to 0;
 declare string f to "end";
 print a
-print b c
-print d e
+print b, c
+print d, e
 print a

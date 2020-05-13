@@ -93,15 +93,15 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-assign myint 5,5 else to 5+ ;5++{}
+assign myint True 5,5 else to 5+ ;5++{}
 '''
 
 # Give the lexer some input
-# lexer.input(data2)
 # filename = 'test_cases/' + sys.argv[1]
 # with open(filename, 'r') as file:
 #     content = file.read()
 #     lexer.input(content)
 
+# lexer.input(data2)
 # for tok in lexer:
 #     print(tok)

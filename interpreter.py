@@ -3,15 +3,15 @@ import parser
 import sys
 yaplParser = yacc.yacc(module=parser, debug=True)
 
-# Dictionary of variable
-# key: identifier/name
-# value: tuple of literal value and type
-# e.g. 'myInt' : (5, 'int')
-variables = { }
-global_env = { }
+# Global environment tuple
+# value1: parent environment
+# value2: current environment dictionary
+# Structure of environment dictionary:
+# {'myInt' : (5, 'int'), ...}
+global_env = (None, { })
 
 def _checkTypeError(value, valType):
-    'Raises typeError if value does not match type'
+    'Raises TypeError if value does not match type'
     if valType == 'int' and not isinstance(value, int):
         raise TypeError
     if valType == 'double' and not isinstance(value, float):
@@ -56,7 +56,7 @@ def eval_exp(tree, env):
     exptype = tree[0]
     if exptype == "int" or exptype == "double":
         return tree[1]
-    elif exptype == "binop":
+    if exptype == "binop":
         op = tree[2]
         left  = eval_exp(tree[1], env)
         right = eval_exp(tree[3], env)
@@ -67,13 +67,15 @@ def eval_exp(tree, env):
     elif exptype == "id":
         var_id = tree[1]
         return env_lookup(env, var_id)
+    else:
+        return tree[1]
 
 def eval_stmt(tree, env):
     stmttype = tree[0]
     if stmttype == "declare":
         _, var_id, var_type, exp = tree
         new_val = eval_exp(exp, env)
-        env_declare(env, var_id, new_val)
+        env_declare(env, var_id, var_type, new_val)
     elif stmttype == "assign":
         _, var_id, exp = tree
         new_val = eval_exp(exp, env)
@@ -93,15 +95,37 @@ def eval_stmts(stmts, env):
     for stmt in stmts:
         eval_stmt(stmt, env)
 
+def env_declare(env, var_id, var_type, new_val):
+    parent_env, curr_env = env
+    if var_id in curr_env:
+        raise EOFError
+    else:
+        _checkTypeError(new_val, var_type)
+        curr_env[var_id] = (var_type, new_val)
+
 def env_lookup(env, var_id):
-    try:
-        varType = env[var_id][1]
-        env[var_id] = (value, varType)   # making new tuple since tuples immutable
-    except LookupError:
-        print(f"Undeclared variable name/id {id!r}")
+    parent_env, curr_env = env
+    if var_id in curr_env:      # if in current env
+        return curr_env[var_id]
+    elif parent_env == None:    # if not even in global env
+        raise LookupError
+    else:                       # else look in parent
+        return env_lookup(parent_env, var_id)
+    # try:
+    #     varType = env[var_id][1]
+    #     env[var_id] = (value, varType)   # making new tuple since tuples immutable
+    # except LookupError:
+    #     print(f"Undeclared variable name/id {id!r}")
 
 def env_update(env, var_id, new_val):
-    env[var_id] = new_val
+    parent_env, curr_env = env
+    if var_id in curr_env:
+        curr_env[var_id] = new_val
+    elif parent_env == None:
+        raise LookupError
+    else:
+        env_update(parent_env, var_id, new_val)
+
 
 def print_val(args, env):
     for arg in args or []:
@@ -111,12 +135,12 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    # print(trees)
+    print(trees)
     if trees is None:
         return
     for tree in trees:
         nodetype = tree[0]
-        if type(tree) == tuple:
+        if type(tree) is tuple:
             if nodetype == 'stmt':
                 eval_stmt(tree[1], global_env)
             # elif nodetype == 'print':
@@ -136,10 +160,10 @@ def run_file(filename):
         content = file.read()
         try:
             trees = yaplParser.parse(content)
+            interpret(trees)
         except Exception as e:
-            print(e)
+            print('Error:', e)
         # print(content)
-        interpret(trees)
 
 def run_terminal():
     while True:
@@ -148,9 +172,13 @@ def run_terminal():
         except EOFError:
             break
         if s == 'exit': break
-        trees = yaplParser.parse(s)
+        try:
+            trees = yaplParser.parse(s)
+            interpret(trees)
+        except Exception as e:
+            print('Error:', e)
         # print(trees)
-        interpret(trees)
+        print(global_env)
 
 def main():
     # print()
