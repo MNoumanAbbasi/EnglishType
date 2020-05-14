@@ -5,6 +5,6 @@ PRINT A SLICE 0, 2;
 B PUSH "Get Ready!";
 B PUSH "Done!";
 PRINT B AT 1;
-DECLARE STRING C TO "Well " + B POP 1;
+DECLARE STRING C TO "Well " + (B POP 1);
 PRINT C;
 PRINT A AT 7;

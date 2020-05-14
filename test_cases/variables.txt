@@ -8,4 +8,4 @@ PRINT a;
 PRINT b, c;
 PRINT d, e;
 PRINT f;
-DECLARE INT e TO 5;.
+DECLARE INT e TO 5;

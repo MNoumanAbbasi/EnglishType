@@ -71,6 +71,16 @@ def p_list_slice(p):
     'expression : expression SLICE INT COMMA INT'
     p[0] = ('slice-list', p[1], p[3], p[5])
 
+def p_list_index(p):
+    'expression : expression AT INT'
+    p[0] = ('index-list', p[1], p[3])
+
+def p_list_push(p):
+    'expression : expression PUSH expression'
+    p[0] = ('push-list', p[1], p[3])
+
+
+
 def p_print_val(p):
     'print_val : PRINT args'
     # args are a list of arguments (tuples)

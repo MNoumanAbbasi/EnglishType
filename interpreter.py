@@ -69,6 +69,13 @@ def eval_exp(tree, env):
     elif exptype == "slice-list":
         lst = eval_exp(tree[1], env)
         return lst[tree[2]: tree[3]]
+    elif exptype == "index-list":
+        lst = eval_exp(tree[1], env)
+        return lst[tree[2]]
+    elif exptype == "push-list":
+        lst = eval_exp(tree[1], env)
+        lst.append(eval_exp(tree[2], env))
+        env_update(env, tree[1][1], lst)
     else:
         return tree[1]
 
@@ -170,7 +177,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    print(trees)
+    # print(trees)
     if trees is None:
         return
     for tree in trees:
@@ -184,13 +191,13 @@ def interpret(trees):
 def run_file(filename):
     with open(filename, 'r') as file:
         content = file.read()
-        # try:
-        trees = yaplParser.parse(content)
-        interpret(trees)
-        # except Exception as e:
-        #     print('ERROR:', e)
+        try:
+            trees = yaplParser.parse(content)
+            interpret(trees)
+        except Exception as e:
+            print('ERROR:', e)
         # print(content)
-        print(global_env)
+        # print(global_env)
 
 def run_terminal():
     while True:
@@ -199,17 +206,18 @@ def run_terminal():
         except EOFError:
             break
         if s == 'exit': break
-        # try:
-        trees = yaplParser.parse(s)
-        interpret(trees)
-        # except Exception as e:
-        #     print('ERROR:', e)
-        #     break
+        try:
+            trees = yaplParser.parse(s)
+            interpret(trees)
+        except Exception as e:
+            print('ERROR:', e)
+            break
         # print(trees)
-        print(global_env)
+        # print(global_env)
 
 def main():
-    # print()
+    print("Welcome to EnglishType Interpreter v0.2!")
+    print("OUTPUT:")
     # if text file provided
     if len(sys.argv) == 2:
         filename = 'test_cases/' + sys.argv[1]

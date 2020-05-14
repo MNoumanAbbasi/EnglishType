@@ -23,7 +23,7 @@ logical_ops = [
     'NOT', 'AND', 'OR',
 ]
 list_ops = [
-    'POP', 'PUSH', 'GET', 'SLICE',
+    'POP', 'PUSH', 'AT', 'SLICE',
 ]
 
 # List of tokens types
@@ -86,8 +86,8 @@ def t_PUSH(t):
     r'PUSH'
     return t
 
-def t_GET(t):
-    r'GET'
+def t_AT(t):
+    r'AT'
     return t
 
 def t_SLICE(t):
