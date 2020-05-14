@@ -140,14 +140,14 @@ def t_error(t):
 
 # Build the lexer
 lexer = lex.lex()
-data = '''
-3 + 4 * 10
-  + -20 *2
-'''
-data2 = '''
-DECLARE LIST I TO [5];
-'''
 
+# data = '''
+# 3 + 4 * 10
+#   + -20 *2
+# '''
+# data2 = '''
+# DECLARE LIST I TO [5];
+# '''
 # Give the lexer some input
 # filename = 'test_cases/' + sys.argv[1]
 # with open(filename, 'r') as file:

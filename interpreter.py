@@ -103,14 +103,6 @@ def eval_stmt(tree, env):
         _, list_id, list_type, value_exps = tree
         values = eval_exp(value_exps, env)
         env_declare(env, list_id, list_type, values)
-    # elif stmttype == "assign-list":
-    #     _, list_id, value_exps = tree
-    #     values = [eval_exp(v, env) for v in value_exps]
-    #     env_update(env, list_id, values)
-    # elif stmttype == "list-op":
-    #     _, list_op = tree
-    #     eval_exp(list_op, env)
-        # env_update(env, )
     elif stmttype == "print":
         print_val(tree[1], env)
     elif stmttype == "postfix":
@@ -131,12 +123,8 @@ def eval_stmts(stmts, env):
 def env_declare(env, var_id, var_type, new_val):
     parent_env, curr_env = env
     if var_id in curr_env:
-        # print('RedeclarationError')
         raise Exception('RedeclarationError')
     else:
-        #     values = []
-        #     for val in new_val:
-        # if var_type != "list":
         _checkTypeError(new_val, var_type)
         curr_env[var_id] = (var_type, new_val)
 
@@ -145,15 +133,9 @@ def env_lookup(env, var_id):
     if var_id in curr_env:      # if in current env
         return curr_env[var_id]
     elif parent_env == None:    # if not even in global env
-        # print('LookupError')
-        raise LookupError
+        raise Exception('LookupError')
     else:                       # else look in parent
         return env_lookup(parent_env, var_id)
-    # try:
-    #     varType = env[var_id][1]
-    #     env[var_id] = (value, varType)   # making new tuple since tuples immutable
-    # except LookupError:
-    #     print(f"Undeclared variable name/id {id!r}")
 
 def env_update(env, var_id, new_val):
     parent_env, curr_env = env
@@ -163,8 +145,7 @@ def env_update(env, var_id, new_val):
         _checkTypeError(new_val, var_type)
         curr_env[var_id] = (var_type, new_val)
     elif parent_env == None:    # Remove this since lookup already done
-        print('LookupError')
-        raise LookupError
+        raise Exception('LookupError')
     else:
         env_update(parent_env, var_id, new_val)
 

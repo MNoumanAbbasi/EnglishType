@@ -79,8 +79,6 @@ def p_list_push(p):
     'expression : expression PUSH expression'
     p[0] = ('push-list', p[1], p[3])
 
-
-
 def p_print_val(p):
     'print_val : PRINT args'
     # args are a list of arguments (tuples)
@@ -124,27 +122,17 @@ def p_expression_id(p):
     'expression : ID'
     p[0] = ('id', p[1])
 
-# def p_id(p):
-#     'id : ID'
-#     p[0] = ('id', p[1])
-
 def p_if_elif_else(p):
     '''if_elif_else : IF expression scope elifstatements elsestatement
                     | IF expression scope elifstatements
                     | IF expression scope elsestatement
                     | IF expression scope'''
-    # if len(p) == 4:
-    # elif len(p) == 6:
     if len(p) == 4:
         p[0] = ('if-elif-else', [(p[2], p[3])])
     if len(p) == 5:
         p[0] = ('if-elif-else', [(p[2], p[3])] + p[4])
     if len(p) == 6:
         p[0] = ('if-elif-else', [(p[2], p[3])] + p[4] + p[5])
-    # print(p[0])
-# def p_if(p):
-#     'ifstatement : IF expression scope'
-#     p[0] = ('if', p[2], p[3])
 
 def p_elif(p):
     '''elifstatements : ELSEIF expression scope elifstatements
@@ -165,12 +153,6 @@ def p_scope(p):
     '''scope : OPENBR statements CLSEBR
              | OPENBR scope CLSEBR'''
     p[0] = p[2]
-    # print(p[0])
-
-# def p_number(p):
-#     '''number : INT
-#               | DOUBLE'''
-#     p[0] = p[1]
 
 def p_empty(p):
     'empty :'
@@ -184,9 +166,6 @@ def p_type(p):
             | BOOL_TYPE'''
     p[0] = p[1].lower()
 
-# def p_statement_expr(p):
-#     'statement : expression'
-#     print(p[1])
 def p_expression_logop(p):
     '''expression : expression LT expression
                   | expression GT expression
@@ -219,13 +198,9 @@ def p_expression_group(p):
     'expression : LPAREN expression RPAREN'
     p[0] = p[2]
 
-# def p_expression_number(p):
-#     'expression : number'
-#     p[0] = p[1]
-
 def p_error(p):
     if p:
-        print(f"Syntax error at {p.value!r}")
-        # raise Exception(f"Syntax error at {p.value!r}")
+        # print(f"Syntax error at {p.value!r}")
+        raise Exception(f"Syntax error at {p.value!r}")
     else:
         raise Exception(f"Syntax error")
