@@ -23,35 +23,6 @@ def _checkTypeError(value, valType):
     if valType == 'bool' and not isinstance(value, bool):
         raise TypeError
 
-
-def get_value_id(id):
-    try:
-        return variables[id][0]
-    except LookupError:
-        print(f"Undefined variable name/id {p[1]!r}")
-        return 0
-
-
-def declare_variable(id, value, typ):
-    if id in variables:
-        # print('RedeclarationError')
-        return
-    try:
-        _checkTypeError(value, typ)
-        variables[id] = (value, typ)
-    except TypeError:
-        print("TypeError")
-
-def assign_variable(id, value):
-    try:
-        varType = variables[id][1]
-        _checkTypeError(value, varType)
-        variables[id] = (value, varType)   # making new tuple since tuples immutable
-    except LookupError:
-        print(f"Undeclared variable name/id {id!r}")
-    except TypeError:
-        print("TypeError")
-
 def eval_exp(tree, env):
     exptype = tree[0]
     if exptype == "unary":
