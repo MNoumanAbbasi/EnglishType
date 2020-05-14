@@ -120,7 +120,7 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-5^7+5<>= NOT % NOTEQUALS
+DECLARE INT I TO 5;
 '''
 
 # Give the lexer some input
@@ -129,6 +129,6 @@ data2 = '''
 #     content = file.read()
 #     lexer.input(content)
 
-lexer.input(data2)
-for tok in lexer:
-    print(tok)
+# lexer.input(data2)
+# for tok in lexer:
+#     print(tok)

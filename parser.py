@@ -110,7 +110,7 @@ def p_type(p):
             | CHAR_TYPE
             | STRING_TYPE
             | BOOL_TYPE'''
-    p[0] = p[1]
+    p[0] = p[1].lower()
 
 # def p_statement_expr(p):
 #     'statement : expression'
@@ -152,7 +152,7 @@ def p_expression_group(p):
 #     p[0] = p[1]
 
 def p_error(p):
-    try:
-        print(f"Syntax error at {p.value!r}")
-    except:
-        print(f"Syntax error")
+    if p:
+        raise Exception(f"Syntax error at {p.value!r}")
+    else:
+        raise Exception(f"Syntax error")

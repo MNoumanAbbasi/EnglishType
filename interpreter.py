@@ -43,14 +43,14 @@ def declare_variable(id, value, typ):
         print("TypeError")
 
 def assign_variable(id, value):
-    # try:
+    try:
         varType = variables[id][1]
         _checkTypeError(value, varType)
         variables[id] = (value, varType)   # making new tuple since tuples immutable
-    # except LookupError:
-    #     print(f"Undeclared variable name/id {id!r}")
-    # except TypeError:
-    #     print("TypeError")
+    except LookupError:
+        print(f"Undeclared variable name/id {id!r}")
+    except TypeError:
+        print("TypeError")
 
 def eval_exp(tree, env):
     exptype = tree[0]
@@ -171,7 +171,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    # print(trees)
+    print(trees)
     if trees is None:
         return
     for tree in trees:
@@ -205,7 +205,7 @@ def run_terminal():
         except Exception as e:
             print('Error:', e)
         # print(trees)
-        # print(global_env)
+        print(global_env)
 
 def main():
     # print()
