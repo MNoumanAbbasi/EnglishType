@@ -109,9 +109,10 @@ def eval_stmt(tree, env):
         postfix_op(tree[1], tree[2], env)
     elif stmttype == "if-elif-else":
         _, if_stmts = tree
+        new_env = (env, { })
         for (condition_exp, then_stmts) in if_stmts:
-            if eval_exp(condition_exp, env):
-                eval_stmts(then_stmts, env)
+            if eval_exp(condition_exp, new_env):
+                eval_stmts(then_stmts, new_env)
                 break
     else:
         eval_exp(tree, env)
@@ -158,7 +159,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    # print(trees)
+    print(trees)
     if trees is None:
         return
     for tree in trees:
@@ -175,8 +176,10 @@ def run_file(filename):
         try:
             trees = yaplParser.parse(content)
             interpret(trees)
+        except SyntaxError as e:
+            print('Cannot Compile:', e)
         except Exception as e:
-            print('ERROR:', e)
+            print('Error:', e)
         # print(content)
         # print(global_env)
 
@@ -190,9 +193,11 @@ def run_terminal():
         try:
             trees = yaplParser.parse(s)
             interpret(trees)
-        except Exception as e:
-            print('ERROR:', e)
+        except SyntaxError as e:
+            print('Cannot Compile:', e)
             break
+        except Exception as e:
+            print('Error:', e)
         # print(trees)
         # print(global_env)
 

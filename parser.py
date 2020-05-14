@@ -149,9 +149,13 @@ def p_else(p):
     else:
         p[0] = []
 
+# def p_statement_scope(p):
+#     'statement'
+
 def p_scope(p):
     '''scope : OPENBR statements CLSEBR
              | OPENBR scope CLSEBR'''
+    # p[0] = ('scope', p[2])
     p[0] = p[2]
 
 def p_empty(p):
@@ -201,6 +205,6 @@ def p_expression_group(p):
 def p_error(p):
     if p:
         # print(f"Syntax error at {p.value!r}")
-        raise Exception(f"Syntax error at {p.value!r}")
+        raise SyntaxError(f"Syntax error at {p.value!r}")
     else:
-        raise Exception(f"Syntax error")
+        raise SyntaxError(f"Syntax error")
