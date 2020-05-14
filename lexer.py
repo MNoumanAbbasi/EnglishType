@@ -10,6 +10,7 @@ keywords = {
     'CHAR' : 'CHAR_TYPE',
     'STRING' : 'STRING_TYPE',
     'BOOL' : 'BOOL_TYPE',
+    'LIST' : 'LIST',
     'TO' : 'TO',
     'IF' : 'IF',
     'ELSE' : 'ELSE',
@@ -29,6 +30,7 @@ tokens = [
     'INCREM', 'DECREM',
     'LPAREN','RPAREN',
     'SEMICL', 'OPENBR', 'CLSEBR', 'COMMA',
+    'LISTOP', 'LISTCL',
  ] + list(keywords.values()) + numerical_ops + logical_ops
 
 
@@ -40,14 +42,17 @@ t_PLUS   = r'\+'
 t_MINUS  = r'-'
 t_TIMES  = r'\*'
 t_DIVIDE = r'/'
+t_POWER  = r'\^'
+t_MOD    = r'%'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+
 t_SEMICL = r'\;'
 t_OPENBR = r'{'
 t_CLSEBR = r'}'
 t_COMMA  = r','
-t_POWER  = r'\^'
-t_MOD    = r'%'
+t_LISTOP = r'\['
+t_LISTCL = r'\]'
 
 t_LT     = r'<'
 t_GT     = r'>'
@@ -121,7 +126,7 @@ data = '''
   + -20 *2
 '''
 data2 = '''
-DECLARE INT I TO 5;
+DECLARE LIST I TO [5];
 '''
 
 # Give the lexer some input

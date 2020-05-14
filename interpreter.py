@@ -80,6 +80,10 @@ def eval_stmt(tree, env):
         _, var_id, exp = tree
         new_val = eval_exp(exp, env)
         env_update(env, var_id, new_val)
+    elif stmttype == "declare-list":
+        _, list_id, list_type, value_exps = tree
+        values = [eval_exp(v, env) for v in value_exps]
+        env_declare(env, list_id, list_type, values)
     elif stmttype == "print":
         print_val(tree[1], env)
     elif stmttype == "postfix":
@@ -103,7 +107,10 @@ def env_declare(env, var_id, var_type, new_val):
         # print('RedeclarationError')
         raise Exception('RedeclarationError')
     else:
-        _checkTypeError(new_val, var_type)
+        #     values = []
+        #     for val in new_val:
+        if var_type != "list":
+            _checkTypeError(new_val, var_type)
         curr_env[var_id] = (var_type, new_val)
 
 def env_lookup(env, var_id):
@@ -156,12 +163,12 @@ def interpret(trees):
 def run_file(filename):
     with open(filename, 'r') as file:
         content = file.read()
-        # try:
-        trees = yaplParser.parse(content)
-        interpret(trees)
-        # except Exception as e:
-        #     print('ERROR:', e)
-        # print(content)
+        try:
+            trees = yaplParser.parse(content)
+            interpret(trees)
+        except Exception as e:
+            print('ERROR:', e)
+        print(content)
 
 def run_terminal():
     while True:
@@ -170,12 +177,12 @@ def run_terminal():
         except EOFError:
             break
         if s == 'exit': break
-        try:
-            trees = yaplParser.parse(s)
-            interpret(trees)
-        except Exception as e:
-            print('ERROR:', e)
-            break
+        # try:
+        trees = yaplParser.parse(s)
+        interpret(trees)
+        # except Exception as e:
+        #     print('ERROR:', e)
+        #     break
         # print(trees)
         # print(global_env)
 

@@ -28,6 +28,7 @@ def p_statements(p):
 def p_statement(p):
     '''statement : var_declare SEMICL
                  | var_assign SEMICL
+                 | list_declare SEMICL
                  | print_val SEMICL
                  | inc_dec SEMICL
                  | if_elif_else'''
@@ -44,6 +45,14 @@ def p_var_declare(p):
 def p_var_assign(p):
     'var_assign : SET ID TO expression'
     p[0] = ('assign', p[2], p[4])
+
+def p_list_declare(p):
+    '''list_declare : DECLARE LIST ID
+                    | DECLARE LIST ID TO LISTOP args LISTCL'''
+    if len(p) == 8:
+        p[0] = ('declare-list', p[3], p[2].lower(), p[6])
+    else:
+        p[0] = ('declare-list', p[3], p[2].lower(), [])
 
 def p_print_val(p):
     'print_val : PRINT args'
