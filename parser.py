@@ -56,20 +56,20 @@ def p_list_declare(p):
         p[0] = ('declare-list', p[3], p[2].lower(), ('list', []))
 
 def p_expression_list(p):
-    'expression : LISTOP args LISTCL'
-    p[0] = ('list', p[2])
-
-# def p_list_assign(p):
-#     '''list_assign : SET ID TO expression'''
-#     p[0] = ('assign-list', p[2], p[5])
-
-# def p_expression_list_op(p):
-#     'expression : list_pop'
-#     p[0] = ('list-op', p[1])
+    '''expression : LISTOP args LISTCL
+                | LISTOP LISTCL'''
+    if len(p) == 4:
+        p[0] = ('list', p[2])
+    else:
+        p[0] = ('list', [])
 
 def p_list_pop(p):
     'expression : expression POP INT'
     p[0] = ('pop-list', p[1], p[3])
+
+def p_list_slice(p):
+    'expression : expression SLICE INT COMMA INT'
+    p[0] = ('slice-list', p[1], p[3], p[5])
 
 def p_print_val(p):
     'print_val : PRINT args'

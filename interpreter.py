@@ -66,6 +66,9 @@ def eval_exp(tree, env):
         pop_val = lst.pop(tree[2])
         env_update(env, tree[1][1], lst)
         return pop_val
+    elif exptype == "slice-list":
+        lst = eval_exp(tree[1], env)
+        return lst[tree[2]: tree[3]]
     else:
         return tree[1]
 
