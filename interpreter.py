@@ -159,7 +159,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    print(trees)
+    # print(trees)
     if trees is None:
         return
     for tree in trees:
