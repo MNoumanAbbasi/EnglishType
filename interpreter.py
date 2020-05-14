@@ -59,6 +59,13 @@ def eval_exp(tree, env):
     elif exptype == "id":
         var_id = tree[1]
         return env_lookup(env, var_id)[1]
+    elif exptype == "list":
+        return [eval_exp(v, env) for v in tree[1]]
+    elif exptype == "pop-list":
+        lst = eval_exp(tree[1], env)
+        pop_val = lst.pop(tree[2])
+        env_update(env, tree[1][1], lst)
+        return pop_val
     else:
         return tree[1]
 
@@ -79,23 +86,21 @@ def eval_stmt(tree, env):
         new_val = eval_exp(exp, env)
         env_declare(env, var_id, var_type, new_val)
     elif stmttype == "assign":
-        _, var_id, exp = tree
+        _, var_id, exp = tree       
         new_val = eval_exp(exp, env)
         env_update(env, var_id, new_val)
     elif stmttype == "declare-list":
         _, list_id, list_type, value_exps = tree
-        if type(value_exps) == tuple:
-            values = eval_exp(value_exps, env)
-        else:
-            values = [eval_exp(v, env) for v in value_exps]
+        values = eval_exp(value_exps, env)
         env_declare(env, list_id, list_type, values)
-    elif stmttype == "assign-list":
-        _, list_id, value_exps = tree
-        values = [eval_exp(v, env) for v in value_exps]
-        env_update(env, list_id, values)
-    elif stmttype == "pop-list":
-        _, exp, index = tree
-        
+    # elif stmttype == "assign-list":
+    #     _, list_id, value_exps = tree
+    #     values = [eval_exp(v, env) for v in value_exps]
+    #     env_update(env, list_id, values)
+    # elif stmttype == "list-op":
+    #     _, list_op = tree
+    #     eval_exp(list_op, env)
+        # env_update(env, )
     elif stmttype == "print":
         print_val(tree[1], env)
     elif stmttype == "postfix":
@@ -106,8 +111,8 @@ def eval_stmt(tree, env):
             if eval_exp(condition_exp, env):
                 eval_stmts(then_stmts, env)
                 break
-    elif stmttype == "exp":
-        eval_exp(tree[1], env)
+    else:
+        eval_exp(tree, env)
 
 def eval_stmts(stmts, env):
     for stmt in stmts:
@@ -176,12 +181,13 @@ def interpret(trees):
 def run_file(filename):
     with open(filename, 'r') as file:
         content = file.read()
-        try:
-            trees = yaplParser.parse(content)
-            interpret(trees)
-        except Exception as e:
-            print('ERROR:', e)
-        print(content)
+        # try:
+        trees = yaplParser.parse(content)
+        interpret(trees)
+        # except Exception as e:
+        #     print('ERROR:', e)
+        # print(content)
+        print(global_env)
 
 def run_terminal():
     while True:

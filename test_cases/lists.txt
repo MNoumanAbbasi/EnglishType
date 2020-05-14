@@ -1,0 +1,2 @@
+DECLARE LIST s TO [3,4];
+PRINT s POP 1;

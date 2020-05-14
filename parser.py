@@ -29,10 +29,9 @@ def p_statement(p):
     '''statement : var_declare SEMICL
                  | var_assign SEMICL
                  | list_declare SEMICL
-                 | list_assign SEMICL
-                 | list_pop SEMICL
                  | print_val SEMICL
                  | inc_dec SEMICL
+                 | expression SEMICL
                  | if_elif_else'''
     p[0] = ('stmt', p[1])
 
@@ -50,21 +49,26 @@ def p_var_assign(p):
 
 def p_list_declare(p):
     '''list_declare : DECLARE LIST ID
-                    | DECLARE LIST ID TO expression
-                    | DECLARE LIST ID TO LISTOP args LISTCL'''
-    if len(p) == 8:
-        p[0] = ('declare-list', p[3], p[2].lower(), p[6])
-    elif len(p) == 6:
+                    | DECLARE LIST ID TO expression'''
+    if len(p) == 6:
         p[0] = ('declare-list', p[3], p[2].lower(), p[5])
     else:
-        p[0] = ('declare-list', p[3], p[2].lower(), [])
+        p[0] = ('declare-list', p[3], p[2].lower(), ('list', []))
 
-def p_list_assign(p):
-    '''list_assign : SET ID TO LISTOP args LISTCL'''
-    p[0] = ('assign-list', p[2], p[5])
+def p_expression_list(p):
+    'expression : LISTOP args LISTCL'
+    p[0] = ('list', p[2])
+
+# def p_list_assign(p):
+#     '''list_assign : SET ID TO expression'''
+#     p[0] = ('assign-list', p[2], p[5])
+
+# def p_expression_list_op(p):
+#     'expression : list_pop'
+#     p[0] = ('list-op', p[1])
 
 def p_list_pop(p):
-    'list_pop : expression POP INT'
+    'expression : expression POP INT'
     p[0] = ('pop-list', p[1], p[3])
 
 def p_print_val(p):
