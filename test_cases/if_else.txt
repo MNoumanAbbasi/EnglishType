@@ -6,19 +6,19 @@ IF (isRaining EQUALS True)
     IF(temp > 45) {
         PRINT "Wear lightweight raincoat";
     }
-    ELSE IF(temp == 45) {
+    ELSEIF(temp EQUALS 45) {
         PRINT "Wear lightweight raincoat";
     }
     ELSE {
         PRINT "Wear fleece and raincoat";
     }
 }
-ELSE IF (isSnowing NOT EQUALS False)
+ELSEIF (isSnowing NOTEQUALS False)
 {
     IF(temp > 20) {
         PRINT "Wear soft shell jacket";
     }
-    ELSE IF (temp >= 0) {
+    ELSEIF (temp >= 0) {
         PRINT "Wear down jacket";
     }
     ELSE {
@@ -26,5 +26,5 @@ ELSE IF (isSnowing NOT EQUALS False)
     }
 }
 ELSE {
-    PRINT "It is hard to come up with interesting examples"
+    PRINT "It is hard to come up with interesting examples";
 }

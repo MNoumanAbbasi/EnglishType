@@ -84,16 +84,12 @@ def eval_stmt(tree, env):
         print_val(tree[1], env)
     elif stmttype == "postfix":
         postfix_op(tree[1], tree[2], env)
-    elif stmttype == "if":
-        _, condition_exp, then_stmts = tree
-        if eval_exp(condition_exp, env):
-            eval_stmts(then_stmts, env)
-    elif stmttype == "if-else":
-        _, condition_exp, then_stmts, else_stmts = tree
-        if eval_exp(condition_exp, env):
-            eval_stmts(then_stmts, env)
-        else:
-            eval_stmts(else_stmts, env)
+    elif stmttype == "if-elif-else":
+        _, if_stmts = tree
+        for (condition_exp, then_stmts) in if_stmts:
+            if eval_exp(condition_exp, env):
+                eval_stmts(then_stmts, env)
+                break
     elif stmttype == "exp":
         eval_exp(tree[1], env)
 
@@ -146,7 +142,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    print(trees)
+    # print(trees)
     if trees is None:
         return
     for tree in trees:

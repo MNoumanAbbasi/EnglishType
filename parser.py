@@ -30,7 +30,7 @@ def p_statement(p):
                  | var_assign SEMICL
                  | print_val SEMICL
                  | inc_dec SEMICL
-                 | control_flow'''
+                 | if_elif_else'''
     p[0] = ('stmt', p[1])
 
 def p_var_declare(p):
@@ -88,31 +88,44 @@ def p_expression_id(p):
     'expression : ID'
     p[0] = ('id', p[1])
 
-def p_control_flow(p):
-    '''control_flow : IF expression scope
-                    | IF expression scope ELSE scope'''
-                #   | ifstatement elifstatements
-                #   | ifstatement elifstatements elsestatement'''
+def p_if_elif_else(p):
+    '''if_elif_else : IF expression scope elifstatements elsestatement
+                    | IF expression scope elifstatements
+                    | IF expression scope elsestatement
+                    | IF expression scope'''
+    # if len(p) == 4:
+    # elif len(p) == 6:
     if len(p) == 4:
-        p[0] = ('if', p[2], p[3])
-    elif len(p) == 6:
-        p[0] = ('if-else', p[2], p[3], p[5])
-
+        p[0] = ('if-elif-else', [(p[2], p[3])])
+    if len(p) == 5:
+        p[0] = ('if-elif-else', [(p[2], p[3])] + p[4])
+    if len(p) == 6:
+        p[0] = ('if-elif-else', [(p[2], p[3])] + p[4] + p[5])
+    # print(p[0])
 # def p_if(p):
 #     'ifstatement : IF expression scope'
 #     p[0] = ('if', p[2], p[3])
 
-# def p_elseif(p):
-#     'elifstatements : ELSE IF expression scope'
-#     p[]
+def p_elif(p):
+    '''elifstatements : ELSEIF expression scope elifstatements
+                      | ELSEIF expression scope'''
+    if len(p) == 5:
+        p[0] = [(p[2], p[3])] + p[4]
+    else:
+        p[0] = [(p[2], p[3])]
 
-# def p_else(p):
-#     'elsestatement : ifstatement ELSE scope'''
-#     p[0] = ('if-else', p[2], p[4], p[8])
+def p_else(p):
+    '''elsestatement : ELSE scope'''
+    if len(p) == 3:
+        p[0] = [(('bool', True), p[2])]
+    else:
+        p[0] = []
 
 def p_scope(p):
-    'scope : OPENBR statements CLSEBR'
+    '''scope : OPENBR statements CLSEBR
+             | OPENBR scope CLSEBR'''
     p[0] = p[2]
+    # print(p[0])
 
 # def p_number(p):
 #     '''number : INT
@@ -172,6 +185,7 @@ def p_expression_group(p):
 
 def p_error(p):
     if p:
-        raise Exception(f"Syntax error at {p.value!r}")
+        print(f"Syntax error at {p.value!r}")
+        # raise Exception(f"Syntax error at {p.value!r}")
     else:
         raise Exception(f"Syntax error")

@@ -13,6 +13,7 @@ keywords = {
     'TO' : 'TO',
     'IF' : 'IF',
     'ELSE' : 'ELSE',
+    'ELSEIF': 'ELSEIF',
 }
 
 numerical_ops = ['PLUS','MINUS','TIMES','DIVIDE','POWER', 'MOD']
