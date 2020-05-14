@@ -43,20 +43,18 @@ def declare_variable(id, value, typ):
         print("TypeError")
 
 def assign_variable(id, value):
-    try:
+    # try:
         varType = variables[id][1]
         _checkTypeError(value, varType)
         variables[id] = (value, varType)   # making new tuple since tuples immutable
-    except LookupError:
-        print(f"Undeclared variable name/id {id!r}")
-    except TypeError:
-        print("TypeError")
+    # except LookupError:
+    #     print(f"Undeclared variable name/id {id!r}")
+    # except TypeError:
+    #     print("TypeError")
 
 def eval_exp(tree, env):
     exptype = tree[0]
-    if exptype == "int" or exptype == "double":
-        return tree[1]
-    elif exptype == "unary":
+    if exptype == "unary":
         return -eval_exp(tree[1], env)
     elif exptype == "not":
         return not eval_exp(tree[1], env)
@@ -64,12 +62,15 @@ def eval_exp(tree, env):
         op = tree[2]
         left  = eval_exp(tree[1], env)
         right = eval_exp(tree[3], env)
-        if   op == '+': return left + right
-        elif op == '-': return left - right
-        elif op == '*': return left * right
-        elif op == '/': return left / right
-        elif op == '^': return left ** right
-        elif op == '%': return left % right
+        try:
+            if   op == '+': return left + right
+            elif op == '-': return left - right
+            elif op == '*': return left * right
+            elif op == '/': return left / right
+            elif op == '^': return left ** right
+            elif op == '%': return left % right
+        except:
+            raise Exception("TypeError")
     elif exptype == "logop":
         op = tree[2]
         left  = eval_exp(tree[1], env)

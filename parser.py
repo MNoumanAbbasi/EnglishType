@@ -6,10 +6,14 @@ start = 'statements'
 
 # Precedence rules for the operators
 precedence = (
+    ('left', 'OR'),
+    ('left', 'AND'),
+    ('right', 'NOT'),
+    ('left', 'EQ', 'NOTEQ', 'LT', 'GT', 'LTE', 'GTE'),
     ('left','PLUS','MINUS'),
-    ('left','TIMES','DIVIDE'),
-    ('right', 'POWER'),
+    ('left','TIMES','DIVIDE','MOD'),
     ('right','UMINUS'),
+    ('right', 'POWER'),
     )
 
 def p_statements(p):
