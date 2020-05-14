@@ -26,5 +26,5 @@ ELSE IF (isSnowing NOT EQUALS False)
     }
 }
 ELSE {
-    print "It is hard to come up with interesting examples"
+    PRINT "It is hard to come up with interesting examples"
 }

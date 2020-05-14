@@ -89,14 +89,18 @@ def p_expression_id(p):
     p[0] = ('id', p[1])
 
 def p_control_flow(p):
-    '''control_flow : ifstatement'''
+    '''control_flow : IF expression scope
+                    | IF expression scope ELSE scope'''
                 #   | ifstatement elifstatements
                 #   | ifstatement elifstatements elsestatement'''
-    p[0] = p[1]
+    if len(p) == 4:
+        p[0] = ('if', p[2], p[3])
+    elif len(p) == 6:
+        p[0] = ('if-else', p[2], p[3], p[5])
 
-def p_if(p):
-    'ifstatement : IF expression scope'
-    p[0] = ('if', p[2], p[3])
+# def p_if(p):
+#     'ifstatement : IF expression scope'
+#     p[0] = ('if', p[2], p[3])
 
 # def p_elseif(p):
 #     'elifstatements : ELSE IF expression scope'

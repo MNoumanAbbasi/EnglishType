@@ -13,15 +13,15 @@ global_env = (None, { })
 def _checkTypeError(value, valType):
     'Raises TypeError if value does not match type'
     if valType == 'int' and not isinstance(value, int):
-        raise TypeError
+        raise Exception("TypeError")
     if valType == 'double' and not isinstance(value, float):
-        raise TypeError
+        raise Exception("TypeError")
     if valType == 'char' and not isinstance(value, str):
-        raise TypeError
+        raise Exception("TypeError")
     if valType == 'string' and not isinstance(value, str):
-        raise TypeError
-    if valType == 'bool' and not isinstance(value, bool):
-        raise TypeError
+        raise Exception("TypeError")
+    if valType == 'bool' and not isinstance(value, (bool, int)):
+        raise Exception("TypeError")
 
 def eval_exp(tree, env):
     exptype = tree[0]
@@ -146,7 +146,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    # print(trees)
+    print(trees)
     if trees is None:
         return
     for tree in trees:
@@ -160,11 +160,11 @@ def interpret(trees):
 def run_file(filename):
     with open(filename, 'r') as file:
         content = file.read()
-        try:
-            trees = yaplParser.parse(content)
-            interpret(trees)
-        except Exception as e:
-            print('ERROR:', e)
+        # try:
+        trees = yaplParser.parse(content)
+        interpret(trees)
+        # except Exception as e:
+        #     print('ERROR:', e)
         # print(content)
 
 def run_terminal():
