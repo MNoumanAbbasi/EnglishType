@@ -1,0 +1,30 @@
+DECLARE BOOL isRaining TO False;
+DECLARE BOOL isSnowing TO True;
+DECLARE BOOL temp TO 0;
+IF (isRaining EQUALS True)
+{
+    IF(temp > 45) {
+        PRINT "Wear lightweight raincoat";
+    }
+    ELSE IF(temp == 45) {
+        PRINT "Wear lightweight raincoat";
+    }
+    ELSE {
+        PRINT "Wear fleece and raincoat";
+    }
+}
+ELSE IF (isSnowing NOT EQUALS False)
+{
+    IF(temp > 20) {
+        PRINT "Wear soft shell jacket";
+    }
+    ELSE IF (temp >= 0) {
+        PRINT "Wear down jacket";
+    }
+    ELSE {
+        PRINT "Wear base layers and down jacket";
+    }
+}
+ELSE {
+    print "It is hard to come up with interesting examples"
+}

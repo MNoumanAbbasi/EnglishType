@@ -29,7 +29,8 @@ def p_statement(p):
     '''statement : var_declare SEMICL
                  | var_assign SEMICL
                  | print_val SEMICL
-                 | inc_dec SEMICL'''
+                 | inc_dec SEMICL
+                 | control_flow'''
     p[0] = ('stmt', p[1])
 
 def p_var_declare(p):
@@ -87,13 +88,27 @@ def p_expression_id(p):
     'expression : ID'
     p[0] = ('id', p[1])
 
-def p_if_else(p):
-    '''statements : IF expression OPENBR statements CLSEBR
-                  | IF expression OPENBR statements CLSEBR ELSE OPENBR statements CLSEBR'''
-    if len(p) == 10:
-        p[0] = ('if-else', p[2], p[4], p[8])
-    else:
-        p[0] = ('if-else', p[2], p[4], None)
+def p_control_flow(p):
+    '''control_flow : ifstatement'''
+                #   | ifstatement elifstatements
+                #   | ifstatement elifstatements elsestatement'''
+    p[0] = p[1]
+
+def p_if(p):
+    'ifstatement : IF expression scope'
+    p[0] = ('if', p[2], p[3])
+
+# def p_elseif(p):
+#     'elifstatements : ELSE IF expression scope'
+#     p[]
+
+# def p_else(p):
+#     'elsestatement : ifstatement ELSE scope'''
+#     p[0] = ('if-else', p[2], p[4], p[8])
+
+def p_scope(p):
+    'scope : OPENBR statements CLSEBR'
+    p[0] = p[2]
 
 # def p_number(p):
 #     '''number : INT

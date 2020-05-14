@@ -51,7 +51,7 @@ def eval_exp(tree, env):
         elif op == '<=': return left <= right
         elif op == '>=': return left >= right
         elif op == 'NOTEQUALS': return left != right
-        elif op == 'EQUALS': return left <= right
+        elif op == 'EQUALS': return left == right
         elif op == 'AND': return left and right
         elif op == 'OR': return left or right
     elif exptype == "id":
@@ -84,9 +84,13 @@ def eval_stmt(tree, env):
         print_val(tree[1], env)
     elif stmttype == "postfix":
         postfix_op(tree[1], tree[2], env)
+    elif stmttype == "if":
+        _, condition_exp, then_stmts = tree
+        if eval_exp(condition_exp, env):
+            eval_stmts(then_stmts, env)
     elif stmttype == "if-else":
         _, condition_exp, then_stmts, else_stmts = tree
-        if eval_exp(condition_exp):
+        if eval_exp(condition_exp, env):
             eval_stmts(then_stmts, env)
         else:
             eval_stmts(else_stmts, env)
@@ -95,7 +99,7 @@ def eval_stmt(tree, env):
 
 def eval_stmts(stmts, env):
     for stmt in stmts:
-        eval_stmt(stmt, env)
+        eval_stmt(stmt[1], env)
 
 def env_declare(env, var_id, var_type, new_val):
     parent_env, curr_env = env
@@ -160,7 +164,7 @@ def run_file(filename):
             trees = yaplParser.parse(content)
             interpret(trees)
         except Exception as e:
-            print('Error:', e)
+            print('ERROR:', e)
         # print(content)
 
 def run_terminal():
@@ -174,10 +178,10 @@ def run_terminal():
             trees = yaplParser.parse(s)
             interpret(trees)
         except Exception as e:
-            print('Error:', e)
+            print('ERROR:', e)
             break
         # print(trees)
-        print(global_env)
+        # print(global_env)
 
 def main():
     # print()
