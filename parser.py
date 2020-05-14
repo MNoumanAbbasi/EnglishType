@@ -29,6 +29,8 @@ def p_statement(p):
     '''statement : var_declare SEMICL
                  | var_assign SEMICL
                  | list_declare SEMICL
+                 | list_assign SEMICL
+                 | list_pop SEMICL
                  | print_val SEMICL
                  | inc_dec SEMICL
                  | if_elif_else'''
@@ -48,11 +50,22 @@ def p_var_assign(p):
 
 def p_list_declare(p):
     '''list_declare : DECLARE LIST ID
+                    | DECLARE LIST ID TO expression
                     | DECLARE LIST ID TO LISTOP args LISTCL'''
     if len(p) == 8:
         p[0] = ('declare-list', p[3], p[2].lower(), p[6])
+    elif len(p) == 6:
+        p[0] = ('declare-list', p[3], p[2].lower(), p[5])
     else:
         p[0] = ('declare-list', p[3], p[2].lower(), [])
+
+def p_list_assign(p):
+    '''list_assign : SET ID TO LISTOP args LISTCL'''
+    p[0] = ('assign-list', p[2], p[5])
+
+def p_list_pop(p):
+    'list_pop : expression POP INT'
+    p[0] = ('pop-list', p[1], p[3])
 
 def p_print_val(p):
     'print_val : PRINT args'
@@ -96,6 +109,10 @@ def p_expression_bool(p):
 def p_expression_id(p):
     'expression : ID'
     p[0] = ('id', p[1])
+
+# def p_id(p):
+#     'id : ID'
+#     p[0] = ('id', p[1])
 
 def p_if_elif_else(p):
     '''if_elif_else : IF expression scope elifstatements elsestatement

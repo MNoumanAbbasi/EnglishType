@@ -22,6 +22,9 @@ logical_ops = [
     'LT', 'GT', 'LTE', 'GTE', 'NOTEQ', 'EQ',
     'NOT', 'AND', 'OR',
 ]
+list_ops = [
+    'POP', 'PUSH', 'GET', 'SLICE',
+]
 
 # List of tokens types
 tokens = [
@@ -31,7 +34,7 @@ tokens = [
     'LPAREN','RPAREN',
     'SEMICL', 'OPENBR', 'CLSEBR', 'COMMA',
     'LISTOP', 'LISTCL',
- ] + list(keywords.values()) + numerical_ops + logical_ops
+ ] + list(keywords.values()) + numerical_ops + logical_ops + list_ops
 
 
 
@@ -73,6 +76,22 @@ def t_AND(t):
     return t
 def t_OR(t):
     r'OR'
+    return t
+
+def t_POP(t):
+    r'POP'
+    return t
+
+def t_PUSH(t):
+    r'PUSH'
+    return t
+
+def t_GET(t):
+    r'GET'
+    return t
+
+def t_SLICE(t):
+    r'SLICE'
     return t
 
 def t_BOOL(t):

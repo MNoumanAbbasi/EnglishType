@@ -22,6 +22,8 @@ def _checkTypeError(value, valType):
         raise Exception("TypeError")
     if valType == 'bool' and not isinstance(value, (bool, int)):
         raise Exception("TypeError")
+    if valType == 'list' and not isinstance(value, list):
+        raise Exception("TypeError")
 
 def eval_exp(tree, env):
     exptype = tree[0]
@@ -82,8 +84,18 @@ def eval_stmt(tree, env):
         env_update(env, var_id, new_val)
     elif stmttype == "declare-list":
         _, list_id, list_type, value_exps = tree
-        values = [eval_exp(v, env) for v in value_exps]
+        if type(value_exps) == tuple:
+            values = eval_exp(value_exps, env)
+        else:
+            values = [eval_exp(v, env) for v in value_exps]
         env_declare(env, list_id, list_type, values)
+    elif stmttype == "assign-list":
+        _, list_id, value_exps = tree
+        values = [eval_exp(v, env) for v in value_exps]
+        env_update(env, list_id, values)
+    elif stmttype == "pop-list":
+        _, exp, index = tree
+        
     elif stmttype == "print":
         print_val(tree[1], env)
     elif stmttype == "postfix":
@@ -109,8 +121,8 @@ def env_declare(env, var_id, var_type, new_val):
     else:
         #     values = []
         #     for val in new_val:
-        if var_type != "list":
-            _checkTypeError(new_val, var_type)
+        # if var_type != "list":
+        _checkTypeError(new_val, var_type)
         curr_env[var_id] = (var_type, new_val)
 
 def env_lookup(env, var_id):
@@ -132,6 +144,7 @@ def env_update(env, var_id, new_val):
     parent_env, curr_env = env
     if var_id in curr_env:
         var_type = curr_env[var_id][0]
+        # if var_type != "list":
         _checkTypeError(new_val, var_type)
         curr_env[var_id] = (var_type, new_val)
     elif parent_env == None:    # Remove this since lookup already done
@@ -149,7 +162,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    # print(trees)
+    print(trees)
     if trees is None:
         return
     for tree in trees:
@@ -184,7 +197,7 @@ def run_terminal():
         #     print('ERROR:', e)
         #     break
         # print(trees)
-        # print(global_env)
+        print(global_env)
 
 def main():
     # print()
