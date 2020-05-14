@@ -34,7 +34,7 @@ def get_value_id(id):
 
 def declare_variable(id, value, typ):
     if id in variables:
-        print('RedeclarationError')
+        # print('RedeclarationError')
         return
     try:
         _checkTypeError(value, typ)
@@ -129,7 +129,7 @@ def eval_stmts(stmts, env):
 def env_declare(env, var_id, var_type, new_val):
     parent_env, curr_env = env
     if var_id in curr_env:
-        print('RedeclarationError')
+        # print('RedeclarationError')
         raise Exception('RedeclarationError')
     else:
         _checkTypeError(new_val, var_type)
@@ -140,7 +140,7 @@ def env_lookup(env, var_id):
     if var_id in curr_env:      # if in current env
         return curr_env[var_id]
     elif parent_env == None:    # if not even in global env
-        print('LookupError')
+        # print('LookupError')
         raise LookupError
     else:                       # else look in parent
         return env_lookup(parent_env, var_id)
@@ -171,7 +171,7 @@ def print_val(args, env):
 
 def interpret(trees):
     'Runs the instructions in the passed Parse Tree'
-    print(trees)
+    # print(trees)
     if trees is None:
         return
     for tree in trees:
@@ -204,6 +204,7 @@ def run_terminal():
             interpret(trees)
         except Exception as e:
             print('Error:', e)
+            break
         # print(trees)
         print(global_env)
 
