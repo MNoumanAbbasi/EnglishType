@@ -206,7 +206,8 @@ def main():
     print("OUTPUT:")
     # if text file provided
     if len(sys.argv) == 2:
-        filename = 'test_cases/' + sys.argv[1]
+        filename = sys.argv[1]
+        # filename = 'test_cases/' + sys.argv[1]
         run_file(filename)
     # else open terminal input
     else:
