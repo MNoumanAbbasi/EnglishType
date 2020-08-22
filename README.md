@@ -2,6 +2,19 @@
 
 A YAPL built using Python for course CS315: Theory of Automata final project.
 
+## [Table of contents](#table-of-contents)
+* [Requirements](#requirements)
+* [Introduction](#introduction)
+* [Getting Started](#getting-started)
+  * [Running a file](#running-a-file)
+  * [Examples](#examples)
+* [Syntax](#syntax)
+  * [Declaring a variable](#declaring-a-variable)
+  * [Assigning a variable](#assigning-a-variable)
+  * [Printing](#printing)
+  * [Conditional statements](#conditional-statements)
+  * [Lists](#lists)
+
 ## Requirements
 
 - PLY library [here](https://github.com/dabeaz/ply)
